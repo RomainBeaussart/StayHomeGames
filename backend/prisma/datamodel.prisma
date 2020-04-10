@@ -1,0 +1,26 @@
+enum Sexe {
+    MAN
+    WOMAN
+}
+
+enum Role {
+    CIVILIAN
+    UNDERCOVER
+    MRWHITE
+}
+
+type Player {
+    id: ID! @id
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+    email: String @unique
+    password: String
+    nickname: String
+}
+
+type Game{
+    id: ID! @id
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+    players: [Player!] @relation(name: "GamePlayers")
+}
