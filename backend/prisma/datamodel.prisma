@@ -3,7 +3,7 @@ enum Sexe {
     WOMAN
 }
 
-enum Role {
+enum UndercoverRole {
     CIVILIAN
     UNDERCOVER
     MRWHITE
