@@ -9,14 +9,8 @@
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 
-@Component({
-    components: {
-        CreateScan
-    }
-})
+@Component
 export default class Index extends Vue {
-
-    dialogCreateScan = false
 
     logout() {
         localStorage.removeItem("apollo-token");

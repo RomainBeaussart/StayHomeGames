@@ -6,7 +6,6 @@ scalar DateTime
 
 type Query {
     loggedInUser: User
-    sendResponse(data: SendResponseInput!): SendResponsePayload
 }
 
 type Mutation {
@@ -33,14 +32,4 @@ input SignupInput {
 
 type SignupPayload {
     id: ID
-}
-
-input SendResponseInput {
-    questionId: ID!
-    playerId: ID!
-    answerIndex: Int!
-}
-
-type SendResponsePayload {
-    answer: Boolean!
 }

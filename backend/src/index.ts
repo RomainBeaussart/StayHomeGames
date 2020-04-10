@@ -21,7 +21,7 @@ import { Prisma } from '../prisma/generated/prisma-client'
 
 const forwardedRequests = [
     //! Queries
-    "Query.player", "Query.players",
+    "Query.user", "Query.users",
     "Query.game", "Query.games",
 
     //! Mutations
@@ -38,12 +38,7 @@ const resolvers = {
         ...user.Mutation,
     },
     Subscription: {
-        player: {
-            subscribe: async (parent, args, context, info) => {
-                console.log(args)
-                return context.binding.subscription.player(args, info)
-            },
-        },
+        
     }
 }
 

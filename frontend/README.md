@@ -1,7 +1,5 @@
-# Scan & Go
+# AvoGames
 ![Version](https://img.shields.io/badge/version-alpha%201.2-blue)
-## Resum
-Scan and Go is an IRL multiplayer game, whose goal is to find the maximum amount of QRCode giving rise to questions that must be answered correctly in the shortest amount of time.
 
 ## Prerequisite
 In order to run this app you must install the following packages:
