@@ -5,7 +5,7 @@
         font-family: 'Lato' !important;
     }
     .container {
-    font-family: 'Lato' !important;
+        font-family: 'Lato' !important;
     }
 }
 
@@ -13,48 +13,6 @@
     border-radius: 20px 20px 0px 0px
 }
 
-.sg-card {
-    border-radius: 20px !important;
-    .headline {
-        font-weight: bold !important;
-        font-size: xx-large !important;
-    }
+.vs-notification__content {
+    font-family: 'Lato' !important;
 }
-
-.sg-card-question {
-    @extend .sg-card;
-    background-color: #e3e4ed !important;
-    border: solid #1f2353 1px !important;
-
-}
-
-.sg-qrcode {
-    background-color: #FFF;
-    border-radius: 20px;
-    width: fit-content;
-}
-
-.v-dialog {
-    border-radius: 20px !important;
-}
-
-.shake {
-    animation: shake 0.3s;
-    animation-iteration-count: 1;
-}
-
-/* === Animation === */
-
-@keyframes shake {
-    0% { transform: translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(3px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(3px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(1px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
-  }

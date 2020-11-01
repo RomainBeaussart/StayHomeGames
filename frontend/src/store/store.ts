@@ -7,15 +7,17 @@ import { User } from '../../../types';
 Vue.use(Vuex);
 
 export interface RootState {
-    user: User,
+    user: {
+        nickname: string,
+        id: string
+    },
 }
 
 export default new Vuex.Store<RootState>({
     state: {
         user: {
             id: '',
-            createdAt: '',
-            updatedAt: ''
+            nickname: ''
         }
     },
     mutations: {
@@ -25,8 +27,7 @@ export default new Vuex.Store<RootState>({
         logoutUser(state) {
             state.user = {
                 id: '',
-                createdAt: '',
-                updatedAt: ''
+                nickname: ''
             }
         }
     } as MutationTree<RootState>,

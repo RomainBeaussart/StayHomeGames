@@ -1,5 +1,5 @@
 <template>
-    <v-app fluid style="background-color: #FFF">
+    <v-app fluid>
         <router-view></router-view>
     </v-app>
 </template>

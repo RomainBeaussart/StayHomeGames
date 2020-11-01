@@ -1,7 +1,6 @@
 query User($id: ID!) {
     user(where: { id: $id }) {
         id,
-        firstname,
-        lastname
+        nickname
     }
 }

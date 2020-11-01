@@ -6,6 +6,8 @@ import store from './store/store'
 
 import Index from './views/Index.vue'
 
+import UnderCoverCreateRoom from './views/undercover/CreateRoom.vue'
+
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import USER_DETAILS from './graphql/auth/UserDetails.gql'
@@ -17,13 +19,20 @@ const router = new Router({
     base: process.env.BASE_URL,
     routes: [
         {
+            path: '/undercover',
+            component: Index,
+            children: [
+                { path: '/undercover/create-room', name: 'undercover', component: UnderCoverCreateRoom }
+            ]
+        },
+        {
             path: '/',
             component: Index,
             children: [
-                { path: '/', name: 'home', component: Home },
+                { path: '/home', name: 'home', component: Home },
+                { path: '/login', name: 'login', component: Login },
             ]
-        },
-        { path: '/login', name: 'login', component: Login }
+        }
     ]
 });
 

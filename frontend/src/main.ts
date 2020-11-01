@@ -14,7 +14,14 @@ Vue.config.productionTip = false;
 
 Vue.use(VueApollo)
 Vue.use(Vuesax, {
-
+    colors: {
+        primary: '#4F5D75',
+        secondary: '#EF8354',
+        warn: '#EF8354',
+        background: '#FFFFFF',
+        subtitle: '#BFC0C0',
+        border: '#2D3142'
+    }
 })
 
 new Vue({

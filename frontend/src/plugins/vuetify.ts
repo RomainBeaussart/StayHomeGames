@@ -17,11 +17,11 @@ export default new Vuetify({
     theme: {
         themes: {
             light: {
-                primary: '#1f2353',
-                secondary: '#ffffff',
-                red: '#ed1459',
-                orange: '#f4a33a',
-                yellow: '#ffdd00'
+                primary: '#4F5D75',
+                secondary: '#EF8354',
+                background: '#FFFFFF',
+                subtitle: '#BFC0C0',
+                border: '#2D3142'
             }
         }
     }

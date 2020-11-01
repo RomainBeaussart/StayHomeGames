@@ -1,48 +1,30 @@
 <template>
-    <v-container fluid class="d-flex justify-center fill-height" primary>
-        <v-card
-            elevation="0"
-            width="40%"
-            class="align-self-center"
-            color="primary"
-        >
-            <v-layout xs6  wrap pa-5>
-                <v-flex xs12>
-                    <v-text-field
-                        v-model="email"
-                        label="Email"
-                        filled
-                        rounded
-                        dark
-                    ></v-text-field>
-                    <v-text-field
-                        v-model="password"
-                        label="Mot de passe"
-                        :append-icon="passwordShow ? 'visibility' : 'visibility_off'"
-                        :type="passwordShow ? 'text' : 'password'"
-                        @click:append="passwordShow = !passwordShow"
-                        filled
-                        rounded
-                        dark
-                    ></v-text-field>
-                </v-flex>
-                <v-flex xs9 class="d-flex justify-start align-center" style="color: #ffdd00">
-                    {{ error }}
-                </v-flex>
-                <v-flex xs3 class="d-flex justify-end">
-                    <v-btn
-                        elevation="0"
-                        @click="login()"
-                        color="orange"
-                        rounded
-                        outlined
-                    >
-                        S'identifier
-                    </v-btn>
-                </v-flex>
-            </v-layout>
-        </v-card>
-    </v-container>
+    <v-row>
+        <v-col cols="12">
+            <vs-input block color="primary" icon-after v-model="email" placeholder="Email">
+                <template #icon>
+                    <i class='bx bx-user'></i>
+                </template>
+            </vs-input>
+        </v-col>
+        <v-col cols="12">
+            <vs-input block color="primary" type="password" icon-after v-model="password" placeholder="Mot de passe">
+                <template #icon>
+                  <i class='bx bx-lock-open-alt'></i>
+                </template>
+            </vs-input>
+        </v-col>
+        <v-col cols="12" class="d-flex justify-end">
+            <vs-button
+                block
+                gradient
+                :loading="loading"
+                @click="login()"
+            >
+                S'identifier
+            </vs-button>
+        </v-col>
+    </v-row>
 </template>
 
 <script lang="ts">
@@ -61,9 +43,9 @@ export default class Login extends Vue {
     email: string = ""
     password: string = ""
 
-    error = ""
+    loading: boolean = false
 
-    loading = false
+    error = ""
 
     async login() {
         try {
@@ -86,10 +68,16 @@ export default class Login extends Vue {
                     this.$router.replace(this.$route.query.from as string)
                 } else {
                     this.$router.replace({ name: 'home' })
+                    this.$emit('isConnected')
                 }
             }
         } catch (e) {
-            this.error = "Vérifiez votre login et mot de passe"
+            this.$vs.notification({
+                color: 'primary',
+                duration: 'none',
+                title: 'Erreur de connexion',
+                text: `Vérifiez votre login et mot de passe`
+            })
             this.loading = false
         }
     }
