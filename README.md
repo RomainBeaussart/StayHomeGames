@@ -1,4 +1,4 @@
-# Undercover
+# StayHomeGames
 ![Version](https://img.shields.io/badge/version-alpha%201.2-blue)
 
 ## Prerequisite
