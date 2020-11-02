@@ -18,9 +18,6 @@
                     <template #icon>
                         <i class="bx bx-key"></i>
                     </template>
-                    <template #message-danger v-if="!isValidRoomId && roomId.length === 25">
-                        Room ID invalide
-                    </template>
                 </vs-input>
             </v-col>
             <v-col cols="1">
@@ -94,6 +91,12 @@ export default class UnderCoverCreateRoom extends Vue {
 
     join() {
         this.loading = true
+        this.$router.push({
+            name: 'undercover-room',
+            params:{
+                roomId: this.roomId
+            }
+        })
     }
 
     @Apollo({
@@ -108,16 +111,15 @@ export default class UnderCoverCreateRoom extends Vue {
         },
         result({ data, loading, networkStatus }: any) {
             if (!loading) {
+                debugger
                 if (
                     data &&
                     data.undercoverRoomsConnection &&
                     data.undercoverRoomsConnection.aggregate &&
-                    data.undercoverRoomsConnection.aggregate.count &&
-                    data.undercoverRoomsConnection.aggregate.count === 1
+                    data.undercoverRoomsConnection.aggregate.count
                 ) {
-                    this.isValidRoomId = true
-                } else {
-                    this.isValidRoomId = false
+                    
+                    this.isValidRoomId = !!data.undercoverRoomsConnection.aggregate.count
                 }
             }
         },
@@ -147,7 +149,7 @@ export default class UnderCoverCreateRoom extends Vue {
         });
     }
 
-    @Watch("isValidRoomId")
+    @Watch("roomId")
     initValidityRoomId() {
         this.isValidRoomId = false
     }

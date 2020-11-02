@@ -14,6 +14,8 @@ type Mutation {
 
     #Undercover
     newUndercoverRoom(data: newUndercoverRoomInput!): newUndercoverRoomPayload
+    joinUndercoverRoom(data: joinUndercoverRoomInput!): joinUndercoverRoomPayload
+    kickUndercoverPlayer(data: kickUndercoverPlayerInput!): kickUndercoverPlayerPayload
 }
 
 input LoginInput {
@@ -43,5 +45,23 @@ input newUndercoverRoomInput {
 }
 
 type newUndercoverRoomPayload {
+    roomId: ID
+}
+
+input joinUndercoverRoomInput {
+    userId: ID!
+    roomId: ID!
+}
+
+type joinUndercoverRoomPayload {
+    roomId: ID
+}
+
+input kickUndercoverPlayerInput {
+    playerId: ID!
+    roomId: ID!
+}
+
+type kickUndercoverPlayerPayload {
     roomId: ID
 }

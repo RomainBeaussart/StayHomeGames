@@ -1,0 +1,8 @@
+mutation KickPlayer($roomId: ID!, $playerId: ID!){
+    kickUndercoverPlayer(data:{
+        roomId: $roomId,
+        playerId: $playerId
+    }){
+        roomId
+    }
+}

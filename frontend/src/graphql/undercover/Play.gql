@@ -1,0 +1,7 @@
+mutation PlayUndercover($roomId: ID!){
+    playUndercover(data: {
+        roomId: $roomId
+    }){
+        roomId
+    }
+}

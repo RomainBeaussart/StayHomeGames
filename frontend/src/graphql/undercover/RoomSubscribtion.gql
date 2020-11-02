@@ -8,6 +8,7 @@ subscription UndercoverRoomSubscription($id: ID!) {
         node {
             id
             name
+            public
             players {
                 id
                 user {
