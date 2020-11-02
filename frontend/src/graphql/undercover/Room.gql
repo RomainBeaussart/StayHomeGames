@@ -1,0 +1,11 @@
+query UndercoverRoom($id: ID!){
+    undercoverRoom(where: { id: $id}){
+        id
+        host { id }
+        name
+        players {
+            id
+            user { nickname }
+        }
+    }
+}

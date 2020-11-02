@@ -1,0 +1,8 @@
+mutation UpdateUndercoverRoom($id: ID!, $name: String){
+    updateUndercoverRoom(
+        where: { id: $id }
+        data: {
+            name: $name
+        }
+    ) { id }
+}

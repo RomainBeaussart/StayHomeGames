@@ -1,8 +1,21 @@
 <template>
     <v-container fluid class="fill-height">
         <v-row no-gutters class="align-center justify-center">
-            <v-col cols="2" class="d-flex justify-center">
-                <h1>Undercover</h1>
+            <v-col cols="12" class="d-flex justify-center">
+                <h1>{{ room.name }}</h1>
+            </v-col>
+            <v-col cols="12" class="d-flex justify-center">
+                <h5>Undercover</h5>
+            </v-col>
+            <v-col cols="12" class="d-flex justify-center">
+                <vs-button
+                    size="large"
+                    warn
+                    :active="active == 0"
+                    @click="active = 0"
+                >
+                    Play
+                </vs-button>
             </v-col>
         </v-row>
         <v-row class="d-flex pt-12 pb-2 align-center justify-center">
@@ -23,8 +36,46 @@
                     </template>
                 </vs-input>
             </v-col>
-            <v-col ref="url" v-show="false">
-                {{ link }}
+            <v-col cols="12"></v-col>
+            <v-col cols="3">
+                <vs-alert success :progress="progress" v-model="copyActive" :hidden-content="true">
+                    <template #icon>
+                        <i class='bx bx-copy'></i>
+                    </template>
+                    <template #title>
+                        Copié
+                    </template>
+                </vs-alert>
+            </v-col>
+        </v-row>
+        <v-row no-gutters class="align-center justify-center" v-if="isHost">
+            <v-col cols="5">
+                <vs-input
+                    type="text"
+                    v-model="room.name"
+                    block
+                    label-placeholder="Nom de la room"
+                    icon-after
+                >
+                    <template #icon>
+                        <i class='bx bx-copy'></i>
+                    </template>
+                </vs-input>
+            </v-col>
+        </v-row>
+        <v-row no-gutters class="align-center justify-center" v-if="isHost">
+            <v-col cols="5">
+                <vs-input
+                    type="text"
+                    v-model="room.name"
+                    block
+                    label-placeholder="Nom de la room"
+                    icon-after
+                >
+                    <template #icon>
+                        <i class='bx bx-copy'></i>
+                    </template>
+                </vs-input>
             </v-col>
         </v-row>
     </v-container>
@@ -34,24 +85,107 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { Apollo } from "../../decorators";
 
+import ROOM_SUBSCRIBTION from "../../graphql/undercover/RoomSubscribtion.gql"
+import ROOM from "../../graphql/undercover/Room.gql"
+import UPDATE_ROOM from "../../graphql/undercover/UpdateRoom.gql"
+
 @Component
 export default class UnderCoverLobby extends Vue {
+
+    time = 1500
+    copyActive = false
+    progress = 0
+
+    get user() {
+        return this.$store.state.user
+    }
+
     get roomId() {
         return this.$route.params.roomId
     }
 
     get link() {
-        debugger
         return `https://stayhome.softcode.fr/undercover/${this.roomId}`
     }
 
+    get isHost() {debugger
+        if(!(this.room && this.room.host && this.room.host.id && this.room.host.id.length === 25)) {
+            return false
+        }
+        return this.user.id === this.room.host.id
+    }
+
+    room: any = {
+        id: '',
+        name: ''
+    }
+
+    mounted() {
+        this.$apollo.addSmartQuery('room', {
+            query: ROOM,
+            variables() {
+                return {
+                    id: this.roomId
+                }
+            },
+            skip() {
+                return this.isHost
+            },
+            result: ({ data, loading, networkStatus }: any) => {
+                if (!loading) {
+                    if (data && data.undercoverRoom) {
+                        debugger
+                        this.room = data.undercoverRoom
+                    }
+                }
+            },
+            subscribeToMore: {
+                document: ROOM_SUBSCRIBTION,
+                variables() {
+                    return {
+                        id: this.roomId
+                    }
+                },
+                updateQuery(previousResult, { subscriptionData }) {
+                    return previousResult;
+                }
+            }
+        })
+    }
+
     onCopySuccess() {
-        this.$vs.notification({
-                color: 'success',
-                icon: "<i class='bx bx-message-square-check'></i>",
-                title: 'Copié !',
-                position: "top-center"
-            })
+        this.copyActive = true
+    }
+
+    onCopyError() {
+        console.log("error copy")
+    }
+
+    @Watch('copyActive')
+    active() {
+        if(this.copyActive) {
+            let interval = setInterval(() => {
+                this.progress++
+            }, this.time / 100);
+
+            setTimeout(() => {
+                this.copyActive = false
+                clearInterval(interval)
+                this.progress = 0
+            }, this.time);
+        }
+    }
+
+    @Watch('room', { deep: true })
+    update(){
+        debugger
+        this.$apollo.mutate({
+            mutation: UPDATE_ROOM,
+            variables: {
+                id: this.room.id,
+                name: this.room.name
+            }
+        })
     }
 }
 </script>

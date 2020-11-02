@@ -1,0 +1,23 @@
+subscription UndercoverRoomSubscription($id: ID!) {
+    undercoverRoom(where: {
+        mutation_in: [UPDATED]
+        node:{
+            id: $id
+        }
+    }) {
+        node {
+            id
+            name
+            players {
+                id
+                user {
+                    id
+                    nickname
+                }
+            }
+            host {
+                id
+            }
+        }
+    }
+}

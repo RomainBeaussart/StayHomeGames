@@ -47,7 +47,12 @@ const resolvers = {
         ...undercover.Mutation,
     },
     Subscription: {
-        
+        undercoverRoom: {
+            subscribe: async (parent, args, context, info) => {
+                console.log(args)
+                return context.binding.subscription.undercoverRoom(args, info)
+            },
+        },
     }
 }
 

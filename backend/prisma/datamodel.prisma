@@ -11,7 +11,7 @@ type User {
     password: String!
     nickname: String!
     attribute: Json
-    type: PlayerType!
+    type: PlayerType! @default(value: USER)
 }
 # ---- UNDERCOVER --- //
 
@@ -29,6 +29,7 @@ type UndercoverPlayer {
     user: User! @relation(name:"UndercoverPlayerUser" link: INLINE)
     role: UndercoverRole! @default(value: SPECTATOR)
     word: String
+    propositions: [String] @scalarList(strategy: RELATION)
     room: UndercoverRoom! @relation(name:"UndercoverRoomPlayers")
 }
 
@@ -36,6 +37,7 @@ type UndercoverRoom {
     id: ID! @id
     createdAt: DateTime! @createdAt
     updatedAt: DateTime! @updatedAt
+    name: String!
     players: [UndercoverPlayer!] @relation(name:"UndercoverRoomPlayers")
     host: User! @relation(name:"UndercoverRoomHost")
 }

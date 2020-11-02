@@ -73,8 +73,9 @@ export default class Login extends Vue {
             }
         } catch (e) {
             this.$vs.notification({
-                color: 'primary',
-                duration: 'none',
+                progress: 'auto',
+                color: 'warn',
+                duration: 2000,
                 title: 'Erreur de connexion',
                 text: `Vérifiez votre login et mot de passe`
             })
