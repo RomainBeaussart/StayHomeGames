@@ -59,7 +59,7 @@ const resolvers = {
 const checkUserMiddleware = (resolve, root, args, context, info) => {
     if ((info.parentType == "Query" || info.parentType == "Mutation" || info.parentType == "Subscription") &&
         info.fieldName !== "login" &&
-        info.fieldName !== "signup") {
+        info.fieldName !== "register") {
         context.userId = getUserId(context)
     }
 

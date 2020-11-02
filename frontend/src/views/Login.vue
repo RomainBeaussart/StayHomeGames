@@ -67,7 +67,7 @@ export default class Login extends Vue {
                 if (this.$route.query.from) {
                     this.$router.replace(this.$route.query.from as string)
                 } else {
-                    this.$router.replace({ name: 'home' })
+                    this.$router.replace({ name: 'gamepage' })
                     this.$emit('isConnected')
                 }
             }
