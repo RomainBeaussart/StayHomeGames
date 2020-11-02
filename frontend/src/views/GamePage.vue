@@ -1,5 +1,15 @@
 <template>
     <v-container fluid class="fill-height">
+        <v-row no-gutters class="align-center justify-center">
+            <v-col cols="2" class="d-flex justify-center">
+                <h1>StayHomeGames</h1>
+            </v-col>
+        </v-row>
+        <v-row no-gutters class="align-center justify-center">
+            <v-col cols="5" class="d-flex justify-center">
+                <h3>Choisis un jeu, créer une partie et joue avec tes amis !</h3>
+            </v-col>
+        </v-row>
         <v-row no-gutters>
             <v-col cols="12" class='d-flex justify-center'>
                 <vs-card-group>
@@ -7,7 +17,7 @@
                         v-for="game of games"
                         @click="route(game.action)"
                         :key="game.id"
-                        type="3"
+                        type="1"
                         color="secondary"
                     >
                         <template #title>
@@ -37,7 +47,8 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { Apollo } from "../decorators";
-import { maskFace } from '../assets/exports'
+import { undercoverPicture } from '../assets/exports'
+import { quizzPicture } from '../assets/exports'
 
 @Component
 export default class GamePage extends Vue {
@@ -47,11 +58,22 @@ export default class GamePage extends Vue {
             {
                 id: 1,
                 title: "Undercover",
-                picture: maskFace,
+                picture: undercoverPicture,
                 description: `
                 Trouvez l'imposteur parmit les joueurs, grâce aux mots qu'ils vous donnent`,
                 action: {
                     page:'undercover',
+                    params: null,
+                },
+            },
+            {
+                id: 2,
+                title: "StayHome! Quizz",
+                picture: quizzPicture,
+                description: `
+                Répondez à une série de questions plus ou moins durs !`,
+                action: {
+                    page:'quizz',
                     params: null,
                 },
             }

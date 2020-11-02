@@ -109,7 +109,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { Apollo } from "../../decorators";
-import { maskFace } from "../../assets/exports"
+import { undercoverPicture } from "../../assets/exports"
 
 import ROOM_SUBSCRIBTION from "../../graphql/undercover/RoomSubscribtion.gql"
 import ROOM from "../../graphql/undercover/Room.gql"
@@ -123,7 +123,7 @@ export default class UnderCoverLobby extends Vue {
     progress = 0
 
     get maskFace() {
-        return maskFace
+        return undercoverPicture
     }
 
     get user() {

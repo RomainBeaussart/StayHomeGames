@@ -1,4 +1,5 @@
-import maskFace from "./maskFace.jpg"
+import undercoverPicture from "./undercoverPicture.jpg"
 import logo from "./logo.png"
+import quizzPicture from "./quizzPicture.png"
 
-export { maskFace, logo }
+export { undercoverPicture, logo, quizzPicture }

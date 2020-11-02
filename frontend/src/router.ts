@@ -9,6 +9,9 @@ import Index from './views/Index.vue'
 import UnderCoverCreateRoom from './views/undercover/CreateRoom.vue'
 import UnderCoverLobby from './views/undercover/Lobby.vue'
 
+import QuizzCreateRoom from './views/quizz/CreateRoomQuizz.vue'
+import QuizzLobby from './views/quizz/LobbyQuizz.vue'
+
 import GamePage from './views/GamePage.vue'
 import Login from './views/Login.vue'
 import Register from './views/Register.vue'
@@ -28,6 +31,14 @@ const router = new Router({
             children: [
                 { path: '/undercover/create-room', name: 'undercover', component: UnderCoverCreateRoom },
                 { path: '/undercover/:roomId', name: 'undercover-room', component: UnderCoverLobby, props: true }
+            ]
+        },
+        {
+            path: '/quizz',
+            component: Index,
+            children: [
+                { path: '/quizz/create-room', name: 'quizz', component: QuizzCreateRoom },
+                { path: '/quizz/:roomId', name: 'quizz-room', component: QuizzLobby, props: true }
             ]
         },
         {
