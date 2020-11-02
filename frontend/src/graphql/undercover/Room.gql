@@ -3,6 +3,7 @@ query UndercoverRoom($id: ID!){
         id
         host { id }
         name
+        public
         players {
             id
             user { id nickname }

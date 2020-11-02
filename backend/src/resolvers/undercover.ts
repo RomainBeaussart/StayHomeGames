@@ -17,19 +17,28 @@ export default {
                 roomId: room.id
             }
         },
-        // joinUndercoverRoom: async (parent, args, context, info) => {
-        //     const descriptions = [
-        //         "N'est pas bizarre, juste en édition limitée",
-        //         "",
-        //     ]
+        joinUndercoverRoom: async (parent, args, context, info) => {
+            const descriptions = [
+                "N'est pas bizarre, juste en édition limitée",
+                "",
+            ]
 
-        //     let description = descriptions[Math.floor(Math.random() * descriptions.length)]
+            let description = descriptions[Math.floor(Math.random() * descriptions.length)]
 
-        //     const player = await context.prisma.createUndercoverPlayer({
-        //         user: { connect: { id: args.data.userId }},
-        //         description: description,
-        //         room: { connect: { id: args.data.roomId }}
-        //     })
-        // }
+            const player = await context.prisma.updateUndercoverRoom({
+                where: {
+                    id: args.data.roomId
+                },
+                data:{
+                    players: { create: {
+                        user: { connect: { id: args.data.userId }},
+                        description: description
+                    }}
+                }
+            })
+            return {
+                roomId: args.data.roomId
+            }
+        }
     }
 }

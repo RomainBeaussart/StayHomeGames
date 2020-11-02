@@ -1,0 +1,10 @@
+mutation JoinUndercoverRoom($userId: ID!, $roomId: ID!){
+    joinUndercoverRoom(
+        data: {
+            userId: $userId,
+            roomId: $roomId
+        }
+    ) {
+        roomId
+    }
+}
