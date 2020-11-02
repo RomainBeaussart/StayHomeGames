@@ -10,7 +10,7 @@ type Query {
 
 type Mutation {
     login(data: LoginInput!): UserAuthPayload
-    signup(data: SignupInput!): SignupPayload
+    register(data: RegisterInput!): RegisterPayload
 
     #Undercover
     newUndercoverRoom(data: newUndercoverRoomInput!): newUndercoverRoomPayload
@@ -26,15 +26,15 @@ type UserAuthPayload {
     user: User!
 }
 
-input SignupInput {
+input RegisterInput {
+    nickname: String!
     email: String!
     password: String!
-    firstname: String
-    lastname: String
 }
 
-type SignupPayload {
-    id: ID
+type RegisterPayload {
+    token: String!
+    user: User!
 }
 
 input newUndercoverRoomInput {

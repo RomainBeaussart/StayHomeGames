@@ -86,7 +86,7 @@ export default class Index extends Vue {
     }
 
     home() {
-        this.$router.push({ name: 'home' })
+        this.$router.push({ name: 'gamepage' })
     }
 }
 </script>
