@@ -73,7 +73,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { Apollo } from "../../decorators";
-import { maskFace } from "../../assets/exports";
+import { quizzPicture } from "../../assets/exports";
 
 import IS_VALID_ROOM_ID from "../../graphql/undercover/IsValidRoomId.gql"
 import CREATE_ROOM from "../../graphql/undercover/CreateRoom.gql"

@@ -71,7 +71,7 @@ export default class GamePage extends Vue {
                 title: "StayHome! Quizz",
                 picture: quizzPicture,
                 description: `
-                Répondez à une série de questions plus ou moins durs !`,
+                Répondez à une série de questions plus ou moins dures !`,
                 action: {
                     page:'quizz',
                     params: null,

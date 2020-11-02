@@ -56,3 +56,40 @@ type UndercoverDuo {
     updatedAt: DateTime! @updatedAt
     words: [String] @scalarList(strategy: RELATION)
 }
+
+# ---- QUIZZ --- //
+
+// enum UndercoverRole {
+//     CIVILIAN
+//     UNDERCOVER
+//     MRWHITE
+//     SPECTATOR
+// }
+
+type QuizzPlayer {
+    id: ID! @id
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+    user: User! @relation(name:"UndercoverPlayerUser" link: INLINE)
+    propositions: [String] @scalarList(strategy: RELATION)
+    room: QuizzRoom! @relation(name:"QuizzRoomPlayers")
+    description: String
+}
+
+type QuizzRoom {
+    id: ID! @id
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+    name: String!
+    players: [QuizzPlayer!] @relation(name:"QuizzRoomPlayers")
+    host: User! @relation(name:"QuizzRoomHost")
+    public: Boolean! @default(value: true)
+    status: RoomStatus! @default(value: LOBBY)
+}
+
+type UndercoverDuo {
+    id: ID! @id
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+    words: [String] @scalarList(strategy: RELATION)
+}
