@@ -7,6 +7,7 @@ import store from './store/store'
 import Index from './views/Index.vue'
 
 import UnderCoverCreateRoom from './views/undercover/CreateRoom.vue'
+import UnderCoverLobby from './views/undercover/Lobby.vue'
 
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
@@ -22,14 +23,15 @@ const router = new Router({
             path: '/undercover',
             component: Index,
             children: [
-                { path: '/undercover/create-room', name: 'undercover', component: UnderCoverCreateRoom }
+                { path: '/undercover/create-room', name: 'undercover', component: UnderCoverCreateRoom },
+                { path: '/undercover/:roomId', name: 'undercover-room', component: UnderCoverLobby, props: true }
             ]
         },
         {
             path: '/',
             component: Index,
             children: [
-                { path: '/home', name: 'home', component: Home },
+                { path: '/', name: 'home', component: Home },
                 { path: '/login', name: 'login', component: Login },
             ]
         }

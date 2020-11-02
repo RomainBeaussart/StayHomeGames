@@ -11,6 +11,9 @@ type Query {
 type Mutation {
     login(data: LoginInput!): UserAuthPayload
     signup(data: SignupInput!): SignupPayload
+
+    #Undercover
+    newUndercoverRoom(data: newUndercoverRoomInput!): newUndercoverRoomPayload
 }
 
 input LoginInput {
@@ -32,4 +35,13 @@ input SignupInput {
 
 type SignupPayload {
     id: ID
+}
+
+input newUndercoverRoomInput {
+    userId: ID!
+    settings: Json!
+}
+
+type newUndercoverRoomPayload {
+    roomId: ID
 }

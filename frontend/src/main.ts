@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueApollo from 'vue-apollo'
+import VueClipboard from 'vue-clipboard2'
 import Vuesax from 'vuesax'
 import 'vuesax/dist/vuesax.css'
 
@@ -13,6 +14,7 @@ import { createProvider } from './vue-apollo'
 Vue.config.productionTip = false;
 
 Vue.use(VueApollo)
+Vue.use(VueClipboard);
 Vue.use(Vuesax, {
     colors: {
         primary: '#4F5D75',

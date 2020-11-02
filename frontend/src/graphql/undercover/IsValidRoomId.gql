@@ -1,0 +1,7 @@
+query isValidRoomId($id: ID!){
+    undercoverRoomsConnection(where:{
+        id: $id
+    }) {
+         aggregate { count } 
+    }
+}

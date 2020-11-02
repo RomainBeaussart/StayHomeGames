@@ -1,25 +1,6 @@
-enum Sexe {
-    MAN
-    WOMAN
-}
-
-enum UndercoverRole {
-    CIVILIAN
-    UNDERCOVER
-    MRWHITE
-}
-
 enum PlayerType {
     USER
     ADMIN
-}
-
-enum WereWolfRole {
-    VILLAGER
-    WOLF
-    HUNTER
-    WITCH
-    LITTLEGIRL
 }
 
 type User {
@@ -32,10 +13,36 @@ type User {
     attribute: Json
     type: PlayerType!
 }
+# ---- UNDERCOVER --- //
 
-type Game {
+enum UndercoverRole {
+    CIVILIAN
+    UNDERCOVER
+    MRWHITE
+    SPECTATOR
+}
+
+type UndercoverPlayer {
     id: ID! @id
     createdAt: DateTime! @createdAt
     updatedAt: DateTime! @updatedAt
-    players: [User!] @relation(name: "GamePlayers")
+    user: User! @relation(name:"UndercoverPlayerUser" link: INLINE)
+    role: UndercoverRole! @default(value: SPECTATOR)
+    word: String
+    room: UndercoverRoom! @relation(name:"UndercoverRoomPlayers")
+}
+
+type UndercoverRoom {
+    id: ID! @id
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+    players: [UndercoverPlayer!] @relation(name:"UndercoverRoomPlayers")
+    host: User! @relation(name:"UndercoverRoomHost")
+}
+
+type UndercoverDuo {
+    id: ID! @id
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+    words: [String] @scalarList(strategy: RELATION)
 }

@@ -16,26 +16,35 @@ import { getUserId } from './helpers/user';
 import { AccessRightDirective } from './helpers/graphQLDirectives'
 
 import user from './resolvers/user'
+import undercover from './resolvers/undercover'
 
 import { Prisma } from '../prisma/generated/prisma-client'
 
 const forwardedRequests = [
     //! Queries
     "Query.user", "Query.users",
-    "Query.game", "Query.games",
+
+    // Undercover
+    "Query.undercoverPlayer", "Query.undercoverPlayers",
+    "Query.undercoverRoom", "Query.undercoverRooms", "Query.undercoverRoomsConnection",
 
     //! Mutations
     "Mutation.createUser", "Mutation.updateUser", "Mutation.deleteUser",
-    "Mutation.createGame", "Mutation.upsertGame", "Mutation.updateGame", "Mutation.deleteGame"
+
+    //Undercover
+    "Mutation.createUndercoverPlayer", "Mutation.updateUndercoverPlayer", "Mutation.upsertUndercoverPlayer", "Mutation.deleteUndercoverPlayer",
+    "Mutation.updateUndercoverRoom", "Mutation.upsertUndercoverRoom", "Mutation.deleteUndercoverRoom",
 
 ]
 
 const resolvers = {
     Query: {
         ...user.Query,
+        ...undercover.Query,
     },
     Mutation: {
         ...user.Mutation,
+        ...undercover.Mutation,
     },
     Subscription: {
         

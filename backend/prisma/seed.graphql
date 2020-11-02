@@ -13,4 +13,13 @@ user2: createUser(data: {
     email: "vincent.dairien@gmail.com"
     type: ADMIN
 }) { id }
+
+undercoverDuo1: createUndercoverDuo(data: {
+    words: { set: ["Cinéma", "Théatre"] }
+}) { id }
+
+undercoverDuo2: createUndercoverDuo(data: {
+    words: { set: ["Aéroport", "Port"] }
+}) { id }
+
 }

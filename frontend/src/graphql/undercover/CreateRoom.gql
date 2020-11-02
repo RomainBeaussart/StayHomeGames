@@ -1,0 +1,10 @@
+mutation CreateUndercoverRoom($userId: ID!, $settings: Json!){
+    newUndercoverRoom(
+        data: {
+            userId: $userId
+            settings: $settings
+        }
+    ){
+        roomId
+    }
+}

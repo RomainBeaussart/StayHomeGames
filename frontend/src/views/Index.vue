@@ -2,7 +2,7 @@
     <div class="center examplex">
         <vs-navbar shadow center-collapsed v-model="active">
             <template #left>
-          <img :src="logo" alt="" height="40px">
+          <img @click="home()" :src="logo" alt="" height="40px">
         </template>
 
             <!-- <vs-navbar-group>
@@ -22,9 +22,9 @@
                     </vs-navbar-item>
                 </template>
             </vs-navbar-group> -->
-            <vs-navbar-item @click="home()">
+            <!-- <vs-navbar-item @click="home()">
                 Quarantine Games
-            </vs-navbar-item>
+            </vs-navbar-item> -->
             <template #right>
                 <template v-if="isLogged">
                     Bonjour {{ user.nickname }}
@@ -76,7 +76,6 @@ export default class Index extends Vue {
     }
 
     get isLogged() {
-        debugger
         return this.$store.state.user.id !== ''
     }
 
