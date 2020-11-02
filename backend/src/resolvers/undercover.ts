@@ -39,6 +39,27 @@ export default {
             return {
                 roomId: args.data.roomId
             }
+        },
+        kickUndercoverPlayer: async (parent, args, context, info) => {
+            let currentPlayers = await context.prisma.undercoverRoom({ id: args.data.roomId }).players()
+            let newCurrentPlayers = currentPlayers.filter( x => x.id !== args.data.playerId)
+
+            await context.prisma.updateUndercoverRoom({
+                where: {
+                    id: args.data.roomId
+                },
+                data:{
+                    players: { set: newCurrentPlayers.map( x => ({ id: x.id })) }
+                }
+            })
+
+            await context.prisma.deleteUndercoverPlayer({
+                id: args.data.playerId
+            })
+
+            return {
+                roomId: args.data.roomId
+            }
         }
     }
 }

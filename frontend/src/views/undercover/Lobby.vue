@@ -5,16 +5,16 @@
                 <h1>{{ room.name }} <i v-if="!room.public" class='bx bx-lock-alt'></i></h1>
             </v-col>
             <v-col cols="12" class="d-flex justify-center">
-                <h5>Undercover</h5> {{ isPlayer }}
+                <h5>Undercover</h5>
             </v-col>
-            <v-col cols="1" class="d-flex justify-center">
+            <v-col cols="1" class="d-flex justify-center" v-if="isHost">
                 <vs-button
                     size="large"
                     warn
                     gradient
                     block
                     :active="active == 0"
-                    @click="active = 0"
+                    @click="play()"
                 >
                     Play
                 </vs-button>
@@ -89,17 +89,11 @@
                             {{ player.description }}
                         </p>
                     </template>
-                    <!-- <template #interactions>
-                        <vs-button danger icon>
-                            <i class='bx bx-heart'></i>
+                    <template #interactions v-if="isHost">
+                        <vs-button @click="kick(player.id)" warn icon v-if="player.user.id !== user.id">
+                            <i class='bx bx-message-square-x'></i>
                         </vs-button>
-                        <vs-button class="btn-chat" shadow primary>
-                          <i class='bx bx-chat' ></i>
-                            <span class="span">
-                                54
-                            </span>
-                        </vs-button>
-                    </template> -->
+                    </template>
                 </vs-card>
             </v-col>
         </v-row>
@@ -140,6 +134,8 @@ import ROOM_SUBSCRIBTION from "../../graphql/undercover/RoomSubscribtion.gql"
 import ROOM from "../../graphql/undercover/Room.gql"
 import UPDATE_ROOM from "../../graphql/undercover/UpdateRoom.gql"
 import JOIN_ROOM from "../../graphql/undercover/JoinRoom.gql"
+import KICK_PLAYER from "../../graphql/undercover/KickPlayer.gql"
+import PLAY from "../../graphql/undercover/Play.gql"
 
 @Component
 export default class UnderCoverLobby extends Vue {
@@ -223,8 +219,12 @@ export default class UnderCoverLobby extends Vue {
         })
     }
 
+    beforeDestroy() {
+
+    }
+
     backToHome() {
-        this.$router.push({ name: 'home' })
+        this.$router.push({ name: 'gamepage' })
     }
 
     onCopySuccess() {
@@ -260,6 +260,25 @@ export default class UnderCoverLobby extends Vue {
         })
     }
 
+    async kick(playerId){
+        this.$apollo.mutate({
+            mutation: KICK_PLAYER,
+            variables: {
+                playerId: playerId,
+                roomId: this.roomId
+            }
+        })
+    }
+
+    async play() {
+        this.$apollo.mutate({
+            mutation: PLAY,
+            variables: {
+                roomId: this.roomId
+            }
+        })
+    }
+
     @Watch('room', { deep: true })
     update(){
         if(this.isHost){
@@ -275,7 +294,7 @@ export default class UnderCoverLobby extends Vue {
             let previousPlayersIds = this.previousSettings.players.map(x => x.user.id)
             let isPreviousPlayer = !!previousPlayersIds.filter(x => x === this.user.id).length
             if(isPreviousPlayer && !this.isPlayer){
-                this.$router.replace({ name: 'home' })
+                this.$router.replace({ name: 'gamepage' })
             }
             debugger
         }
