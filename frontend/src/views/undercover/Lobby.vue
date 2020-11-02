@@ -7,10 +7,12 @@
             <v-col cols="12" class="d-flex justify-center">
                 <h5>Undercover</h5>
             </v-col>
-            <v-col cols="12" class="d-flex justify-center">
+            <v-col cols="1" class="d-flex justify-center">
                 <vs-button
                     size="large"
                     warn
+                    gradient
+                    block
                     :active="active == 0"
                     @click="active = 0"
                 >
@@ -19,7 +21,8 @@
             </v-col>
         </v-row>
         <v-row class="d-flex pt-12 pb-2 align-center justify-center">
-            <v-col cols="5">
+            <v-col cols="2"></v-col>
+            <v-col cols="4" class="py-5">
                 <vs-input
                     type="text"
                     :value="link"
@@ -36,8 +39,7 @@
                     </template>
                 </vs-input>
             </v-col>
-            <v-col cols="12"></v-col>
-            <v-col cols="3">
+            <v-col cols="2">
                 <vs-alert success :progress="progress" v-model="copyActive" :hidden-content="true">
                     <template #icon>
                         <i class='bx bx-copy'></i>
@@ -48,8 +50,8 @@
                 </vs-alert>
             </v-col>
         </v-row>
-        <v-row no-gutters class="align-center justify-center" v-if="isHost">
-            <v-col cols="5">
+        <v-row class="align-center justify-center" v-if="isHost">
+            <v-col cols="4">
                 <vs-input
                     type="text"
                     v-model="room.name"
@@ -58,24 +60,47 @@
                     icon-after
                 >
                     <template #icon>
-                        <i class='bx bx-copy'></i>
+                        <i class='bx bx-message-square-edit' ></i>
                     </template>
                 </vs-input>
             </v-col>
-        </v-row>
-        <v-row no-gutters class="align-center justify-center" v-if="isHost">
-            <v-col cols="5">
-                <vs-input
-                    type="text"
-                    v-model="room.name"
-                    block
-                    label-placeholder="Nom de la room"
-                    icon-after
-                >
-                    <template #icon>
-                        <i class='bx bx-copy'></i>
+            <v-col cols="1">
+                <vs-switch v-model="room.public">
+                    <template #on>
+                        Public
                     </template>
-                </vs-input>
+                    <template #off>
+                        Private
+                    </template>
+                </vs-switch>
+            </v-col>
+        </v-row>
+        <v-row class="align-center justify-center" v-if="isHost">
+            <v-col cols="3" class="d-flex justify-center" v-for="player of room.players" :key="player.id">
+                <vs-card>
+                    <template #title>
+                        <h3>{{ player.user.nickname }}</h3>
+                    </template>
+                    <template #img>
+                        <img :src="maskFace" alt="">
+                    </template>
+                    <template #text>
+                        <p>
+                            {{ player.description }}
+                        </p>
+                    </template>
+                    <!-- <template #interactions>
+                        <vs-button danger icon>
+                            <i class='bx bx-heart'></i>
+                        </vs-button>
+                        <vs-button class="btn-chat" shadow primary>
+                          <i class='bx bx-chat' ></i>
+                            <span class="span">
+                                54
+                            </span>
+                        </vs-button>
+                    </template> -->
+                </vs-card>
             </v-col>
         </v-row>
     </v-container>
@@ -84,6 +109,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { Apollo } from "../../decorators";
+import { maskFace } from "../../assets/exports"
 
 import ROOM_SUBSCRIBTION from "../../graphql/undercover/RoomSubscribtion.gql"
 import ROOM from "../../graphql/undercover/Room.gql"
@@ -95,6 +121,10 @@ export default class UnderCoverLobby extends Vue {
     time = 1500
     copyActive = false
     progress = 0
+
+    get maskFace() {
+        return maskFace
+    }
 
     get user() {
         return this.$store.state.user
@@ -174,6 +204,10 @@ export default class UnderCoverLobby extends Vue {
                 this.progress = 0
             }, this.time);
         }
+    }
+
+    async join() {
+
     }
 
     @Watch('room', { deep: true })

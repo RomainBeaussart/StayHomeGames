@@ -14,6 +14,7 @@ subscription UndercoverRoomSubscription($id: ID!) {
                     id
                     nickname
                 }
+                description
             }
             host {
                 id

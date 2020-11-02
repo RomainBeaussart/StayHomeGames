@@ -49,7 +49,7 @@ export default class Home extends Vue {
                 title: "Undercover",
                 picture: maskFace,
                 description: `
-                Trouvez l'imposteur parmit les joueurs, grâce aux mots qu'ils vous donne`,
+                Trouvez l'imposteur parmit les joueurs, grâce aux mots qu'ils vous donnent`,
                 action: {
                     page:'undercover',
                     params: null,

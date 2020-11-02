@@ -28,12 +28,12 @@
             <template #right>
                 <template v-if="isLogged">
                     Bonjour {{ user.nickname }}
-                    <vs-button @click="logout()">
+                    <vs-button gradient @click="logout()">
                         Disconnect
                     </vs-button>
                 </template>
                 <template v-else>
-                    <vs-button warn @click="activeLoginDialog = true">
+                    <vs-button gradient warn @click="activeLoginDialog = true">
                         Login
                     </vs-button>
                 </template>

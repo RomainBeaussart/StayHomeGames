@@ -3,6 +3,11 @@ enum PlayerType {
     ADMIN
 }
 
+enum RoomStatus {
+    IN_GAME
+    LOBBY
+}
+
 type User {
     id: ID! @id
     createdAt: DateTime! @createdAt
@@ -31,6 +36,7 @@ type UndercoverPlayer {
     word: String
     propositions: [String] @scalarList(strategy: RELATION)
     room: UndercoverRoom! @relation(name:"UndercoverRoomPlayers")
+    description: String
 }
 
 type UndercoverRoom {
@@ -40,6 +46,8 @@ type UndercoverRoom {
     name: String!
     players: [UndercoverPlayer!] @relation(name:"UndercoverRoomPlayers")
     host: User! @relation(name:"UndercoverRoomHost")
+    public: Boolean! @default(value: true)
+    status: RoomStatus! @default(value: LOBBY)
 }
 
 type UndercoverDuo {
