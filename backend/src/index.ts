@@ -17,6 +17,7 @@ import { AccessRightDirective } from './helpers/graphQLDirectives'
 
 import user from './resolvers/user'
 import undercover from './resolvers/undercover'
+import quizz from './resolvers/quizz'
 
 import { Prisma } from '../prisma/generated/prisma-client'
 
@@ -28,6 +29,10 @@ const forwardedRequests = [
     "Query.undercoverPlayer", "Query.undercoverPlayers",
     "Query.undercoverRoom", "Query.undercoverRooms", "Query.undercoverRoomsConnection",
 
+    // Quizz
+    "Query.quizzPlayer", "Query.quizzPlayers",
+    "Query.quizzRoom", "Query.quizzRooms", "Query.quizzRoomsConnection",
+
     //! Mutations
     "Mutation.createUser", "Mutation.updateUser", "Mutation.deleteUser",
 
@@ -35,22 +40,34 @@ const forwardedRequests = [
     "Mutation.createUndercoverPlayer", "Mutation.updateUndercoverPlayer", "Mutation.upsertUndercoverPlayer", "Mutation.deleteUndercoverPlayer",
     "Mutation.updateUndercoverRoom", "Mutation.upsertUndercoverRoom", "Mutation.deleteUndercoverRoom",
 
+    // Quizz
+    "Mutation.createQuizzPlayer", "Mutation.updateQuizzPlayer", "Mutation.upsertQuizzPlayer", "Mutation.deleteQuizzPlayer",
+    "Mutation.updateQuizzRoom", "Mutation.upsertQuizzRoom", "Mutation.deleteQuizzRoom",
+
 ]
 
 const resolvers = {
     Query: {
         ...user.Query,
         ...undercover.Query,
+        ...quizz.Query,
     },
     Mutation: {
         ...user.Mutation,
         ...undercover.Mutation,
+        ...quizz.Mutation
     },
     Subscription: {
         undercoverRoom: {
             subscribe: async (parent, args, context, info) => {
                 console.log(args)
                 return context.binding.subscription.undercoverRoom(args, info)
+            },
+        },
+        quizzRoom: {
+            subscribe: async (parent, args, context, info) => {
+                console.log(args)
+                return context.binding.subscription.quizzRoom(args, info)
             },
         },
     }

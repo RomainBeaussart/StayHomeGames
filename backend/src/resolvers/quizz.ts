@@ -4,29 +4,29 @@ export default {
     Query: {
     },
     Mutation: {
-        newUndercoverRoom: async (parent, args, context, info) => {
-            console.log("eee")
-            const room = await context.prisma.createUndercoverRoom({
+        newQuizzRoom: async (parent, args, context, info) => {
+            console.log("aaa")
+            const room = await context.prisma.createQuizzRoom({
                 name: args.data.settings.name,
                 host: { connect: { id: args.data.userId}},
                 players: { create: [{
                     user: { connect: { id: args.data.userId } },
-                    description: "N'est pas bizarre, juste en édition limitée"
+                    description: "N'a pas été bercé trop près du mur.. non non non.."
                 }]}
             })
             return {
                 roomId: room.id
             }
         },
-        joinUndercoverRoom: async (parent, args, context, info) => {
+        joinQuizzRoom: async (parent, args, context, info) => {
             const descriptions = [
-                "N'est pas bizarre, juste en édition limitée",
+                "N'a pas été bercé trop près du mur.. non non non..",
                 "",
             ]
 
             let description = descriptions[Math.floor(Math.random() * descriptions.length)]
 
-            const player = await context.prisma.updateUndercoverRoom({
+            const player = await context.prisma.updateQuizzRoom({
                 where: {
                     id: args.data.roomId
                 },
@@ -41,11 +41,11 @@ export default {
                 roomId: args.data.roomId
             }
         },
-        kickUndercoverPlayer: async (parent, args, context, info) => {
-            let currentPlayers = await context.prisma.undercoverRoom({ id: args.data.roomId }).players()
+        kickQuizzPlayer: async (parent, args, context, info) => {
+            let currentPlayers = await context.prisma.quizzRoom({ id: args.data.roomId }).players()
             let newCurrentPlayers = currentPlayers.filter( x => x.id !== args.data.playerId)
 
-            await context.prisma.updateUndercoverRoom({
+            await context.prisma.updateQuizzRoom({
                 where: {
                     id: args.data.roomId
                 },
@@ -54,7 +54,7 @@ export default {
                 }
             })
 
-            await context.prisma.deleteUndercoverPlayer({
+            await context.prisma.deleteQuizzPlayer({
                 id: args.data.playerId
             })
 

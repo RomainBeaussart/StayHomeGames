@@ -5,7 +5,7 @@
                 <h1>{{ room.name }}</h1>
             </v-col>
             <v-col cols="12" class="d-flex justify-center">
-                <h5>Undercover</h5>
+                <h5>StayHome! Quizz</h5>
             </v-col>
             <v-col cols="1" class="d-flex justify-center">
                 <vs-button
@@ -111,19 +111,19 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { Apollo } from "../../decorators";
 import { quizzPicture } from "../../assets/exports"
 
-import ROOM_SUBSCRIBTION from "../../graphql/undercover/RoomSubscribtion.gql"
-import ROOM from "../../graphql/undercover/Room.gql"
-import UPDATE_ROOM from "../../graphql/undercover/UpdateRoom.gql"
+import ROOM_SUBSCRIBTION from "../../graphql/quizz/RoomSubscribtion.gql"
+import ROOM from "../../graphql/quizz/Room.gql"
+import UPDATE_ROOM from "../../graphql/quizz/UpdateRoom.gql"
 
 @Component
-export default class UnderCoverLobby extends Vue {
+export default class quizzLobby extends Vue {
 
     time = 1500
     copyActive = false
     progress = 0
 
     get maskFace() {
-        return undercoverPicture
+        return quizzPicture
     }
 
     get user() {
@@ -135,7 +135,7 @@ export default class UnderCoverLobby extends Vue {
     }
 
     get link() {
-        return `https://stayhome.softcode.fr/undercover/${this.roomId}`
+        return `https://stayhome.softcode.fr/quizz/${this.roomId}`
     }
 
     get isHost() {debugger
@@ -163,9 +163,9 @@ export default class UnderCoverLobby extends Vue {
             },
             result: ({ data, loading, networkStatus }: any) => {
                 if (!loading) {
-                    if (data && data.undercoverRoom) {
+                    if (data && data.quizzRoom) {
                         debugger
-                        this.room = data.undercoverRoom
+                        this.room = data.quizzRoom
                     }
                 }
             },

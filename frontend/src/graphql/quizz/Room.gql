@@ -1,0 +1,13 @@
+query QuizzRoom($id: ID!){
+    quizzRoom(where: { id: $id}){
+        id
+        host { id }
+        name
+        public
+        players {
+            id
+            user { id nickname }
+            description
+        }
+    }
+}

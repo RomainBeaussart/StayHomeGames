@@ -1,0 +1,9 @@
+mutation UpdateQuizzRoom($id: ID!, $name: String, $public: Boolean!){
+    updateQuizzRoom(
+        where: { id: $id }
+        data: {
+            name: $name
+            public: $public
+        }
+    ) { id }
+}

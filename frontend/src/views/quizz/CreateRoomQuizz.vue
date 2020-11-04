@@ -49,7 +49,7 @@
         </v-row>
         <vs-dialog blur v-model="dialogCreateRoom" width="10%">
             <template #header>
-                <h4 class="not-margin">Créer une Room <b>UnderCover</b></h4>
+                <h4 class="not-margin">Créer une room <b>StayHome! Quizz</b></h4>
             </template>
             <div class="con-form pt-3">
                 <vs-input block icon-after warn v-model="roomName" label-placeholder="Nom de la Room">
@@ -75,11 +75,11 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { Apollo } from "../../decorators";
 import { quizzPicture } from "../../assets/exports";
 
-import IS_VALID_ROOM_ID from "../../graphql/undercover/IsValidRoomId.gql"
-import CREATE_ROOM from "../../graphql/undercover/CreateRoom.gql"
+import IS_VALID_ROOM_ID from "../../graphql/quizz/IsValidRoomId.gql"
+import CREATE_ROOM from "../../graphql/quizz/CreateRoom.gql"
 
 @Component
-export default class UnderCoverCreateRoom extends Vue {
+export default class QuizzCreateRoom extends Vue {
     roomId = ""
 
     roomName = ""
@@ -110,10 +110,10 @@ export default class UnderCoverCreateRoom extends Vue {
             if (!loading) {
                 if (
                     data &&
-                    data.undercoverRoomsConnection &&
-                    data.undercoverRoomsConnection.aggregate &&
-                    data.undercoverRoomsConnection.aggregate.count &&
-                    data.undercoverRoomsConnection.aggregate.count === 1
+                    data.quizzRoomsConnection &&
+                    data.quizzRoomsConnection.aggregate &&
+                    data.quizzRoomsConnection.aggregate.count &&
+                    data.quizzRoomsConnection.aggregate.count === 1
                 ) {
                     this.isValidRoomId = true
                 } else {
@@ -129,6 +129,8 @@ export default class UnderCoverCreateRoom extends Vue {
     }
 
     async createRoom(){
+        console.log(this.user.id)
+        console.log(this.roomName)
         const result = await this.$apollo.mutate({
             mutation: CREATE_ROOM,
             variables: {
@@ -138,13 +140,16 @@ export default class UnderCoverCreateRoom extends Vue {
                 }
             }
         })
-        debugger
-        this.$router.push({
-            name: "undercover-room",
-            params: {
-                roomId: result.data.newUndercoverRoom.roomId
-            }
-        });
+        console.log(result.data)
+        // debugger
+        if (result && result.data && result.data.newQuizzRoom && result.data.newQuizzRoom.roomId) {
+            this.$router.push({
+                name: "quizz-room",
+                params: {
+                    roomId: result.data.newQuizzRoom.roomId
+                }
+            });
+        } else { debugger }
     }
 
     @Watch("isValidRoomId")

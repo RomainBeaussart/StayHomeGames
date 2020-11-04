@@ -1,0 +1,25 @@
+subscription QuizzRoomSubscription($id: ID!) {
+    quizzRoom(where: {
+        mutation_in: [UPDATED]
+        node:{
+            id: $id
+        }
+    }) {
+        node {
+            id
+            name
+            public
+            players {
+                id
+                user {
+                    id
+                    nickname
+                }
+                description
+            }
+            host {
+                id
+            }
+        }
+    }
+}

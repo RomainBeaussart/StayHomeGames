@@ -59,19 +59,24 @@ type UndercoverDuo {
 
 # ---- QUIZZ --- //
 
-// enum UndercoverRole {
-//     CIVILIAN
-//     UNDERCOVER
-//     MRWHITE
-//     SPECTATOR
-// }
+enum QuizzRoomTopics {
+    ALL
+    JEUX
+    ANIMAUX
+    CELEBRITES
+    ARTS
+    INFORMATIQUE
+    SCIENCE
+    NATURE
+    LOISIR
+}
 
 type QuizzPlayer {
     id: ID! @id
     createdAt: DateTime! @createdAt
     updatedAt: DateTime! @updatedAt
-    user: User! @relation(name:"UndercoverPlayerUser" link: INLINE)
-    propositions: [String] @scalarList(strategy: RELATION)
+    user: User! @relation(name:"QuizzPlayerUser" link: INLINE)
+    points: Float
     room: QuizzRoom! @relation(name:"QuizzRoomPlayers")
     description: String
 }
@@ -85,11 +90,5 @@ type QuizzRoom {
     host: User! @relation(name:"QuizzRoomHost")
     public: Boolean! @default(value: true)
     status: RoomStatus! @default(value: LOBBY)
-}
-
-type UndercoverDuo {
-    id: ID! @id
-    createdAt: DateTime! @createdAt
-    updatedAt: DateTime! @updatedAt
-    words: [String] @scalarList(strategy: RELATION)
+    topic: QuizzRoomTopics @default(value: ALL)
 }

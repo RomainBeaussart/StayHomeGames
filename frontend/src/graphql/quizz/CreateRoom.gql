@@ -1,0 +1,10 @@
+mutation CreateQuizzRoom($userId: ID!, $settings: Json!){
+    newQuizzRoom(
+        data: {
+            userId: $userId
+            settings: $settings
+        }
+    ){
+        roomId
+    }
+}

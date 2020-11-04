@@ -16,8 +16,14 @@ type Mutation {
     newUndercoverRoom(data: newUndercoverRoomInput!): newUndercoverRoomPayload
     joinUndercoverRoom(data: joinUndercoverRoomInput!): joinUndercoverRoomPayload
     kickUndercoverPlayer(data: kickUndercoverPlayerInput!): kickUndercoverPlayerPayload
+
+    #Quizz
+    newQuizzRoom(data: newQuizzRoomInput!): newQuizzRoomPayload
+    joinQuizzRoom(data: joinQuizzRoomInput!): joinQuizzRoomPayload
+    kickQuizzPlayer(data: kickQuizzPlayerInput!): kickQuizzPlayerPayload
 }
 
+# Users
 input LoginInput {
     email: String!
     password: String!
@@ -39,6 +45,7 @@ type RegisterPayload {
     user: User!
 }
 
+# Undercover
 input newUndercoverRoomInput {
     userId: ID!
     settings: Json!
@@ -63,5 +70,33 @@ input kickUndercoverPlayerInput {
 }
 
 type kickUndercoverPlayerPayload {
+    roomId: ID
+}
+
+#Quizz
+input newQuizzRoomInput {
+    userId: ID!
+    settings: Json!
+}
+
+type newQuizzRoomPayload {
+    roomId: ID
+}
+
+input joinQuizzRoomInput {
+    userId: ID!
+    roomId: ID!
+}
+
+type joinQuizzRoomPayload {
+    roomId: ID
+}
+
+input kickQuizzPlayerInput {
+    playerId: ID!
+    roomId: ID!
+}
+
+type kickQuizzPlayerPayload {
     roomId: ID
 }
