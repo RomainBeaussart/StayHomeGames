@@ -59,7 +59,8 @@ export default {
             }
         },
         setRoundUndercover: async(parent, args, context, info) => {
-            let currentPlayers = await context.prisma.undercoverRoom({ id: args.data.roomId }).players()
+            let currentPlayers = 
+            await context.prisma.undercoverRoom({ id: args.data.roomId }).players()
             let currentUser = await context.prisma.undercoverPlayer({ id: args.data.playerId }).user()
             let playerIndex = currentPlayers.map(x => x.id).indexOf(args.data.playerId)
             let newPlayerIndex = playerIndex + 1
@@ -67,12 +68,26 @@ export default {
                 newPlayerIndex = 0
             }
 
-            await context.prisma.updateUndercoverRoom({
-                where: { id: args.data.roomId },
-                data:{
-                    currentPlayer: { connect: { id: currentPlayers[newPlayerIndex].id }}
-                }
-            })
+            let newtPlayerId = currentPlayers[newPlayerIndex].id
+
+            let propositionsCounts = currentPlayers.map( x => x.propositions.length === 3)
+
+            if(propositionsCounts.reduce((accumulator, currentValue) => accumulator && currentValue)) {
+                await context.prisma.updateUndercoverRoom({
+                    where: { id: args.data.roomId },
+                    data:{
+                        currentPlayer: { disconnect: true },
+                        status: 'LOBBY'
+                    }
+                })
+            } else {
+                await context.prisma.updateUndercoverRoom({
+                    where: { id: args.data.roomId },
+                    data:{
+                        currentPlayer: { connect: { id: currentPlayers[newPlayerIndex].id }}
+                    }
+                })
+            }
 
             console.log("Next Player")
 
@@ -86,6 +101,17 @@ export default {
 
             return {
                 roomId: args.data.roomId
+            }
+        },
+        sendVoteUndercover: async (parent, args, context, info) => {
+            await context.prisma.updateUndercoverPlayer({
+                where:{ id: args.data.thinkIs },
+                data:{
+                    receivedVotesFrom: { connect: { id: args.data.playerId } }
+                }
+            })
+            return {
+                roomId: args.data.playerId
             }
         },
         newUndercoverRoom: async (parent, args, context, info) => {

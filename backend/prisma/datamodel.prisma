@@ -37,6 +37,7 @@ type UndercoverPlayer {
     propositions: [String] @scalarList(strategy: RELATION)
     room: UndercoverRoom! @relation(name:"UndercoverRoomPlayers")
     description: String
+    receivedVotesFrom: [UndercoverPlayer!] @relation(name: "UndercoverPlayerReceivedVotesFrom")
 }
 
 type UndercoverRoom {

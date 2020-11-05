@@ -47,10 +47,10 @@
         <v-row>
             <v-col cols="12" class="d-flex align-center justify-center">
                 <v-row class="d-flex justify-center">
-                    <v-col cols="7" class="d-flex align-center justify-center" v-for="plyr in players" :key="plyr.id">
+                    <v-col cols="4" class="d-flex align-center justify-center" v-for="plyr in players" :key="plyr.id">
                         <v-row no-gutters>
                             <v-col style="max-width: fit-content" class="pr-5" @click="setSelectedPlayer(plyr)">
-                                <template v-if="room.currentPlayer.id === plyr.id">
+                                <template v-if="room.currentPlayer && room.currentPlayer.id === plyr.id">
                                     <vs-avatar
                                         :history="plyr.id === selectedPlayer.id"
                                         warn writing badge
@@ -67,12 +67,15 @@
                                     {{ plyr.user.nickname }}
                                 </div>
                             </v-col>
-                            <v-col class="d-flex align-center">
+                            <v-col class="d-flex align-center" cols="4">
                                 <v-row no-gutters>
                                     <v-col cols="12" v-for="proposition in plyr.propositions" :key="proposition">
                                         <i class='bx bx-right-arrow'></i> {{ proposition }}<br/>
                                     </v-col>
                                 </v-row>
+                            </v-col>
+                            <v-col cols="4" style="max-width: fit-content" class="d-flex align-center pr-5" v-if="isEndGame">
+                                <h3>{{ plyr.receivedVotesFrom.length || "0" }}</h3>
                             </v-col>
                         </v-row>
                     </v-col>
@@ -91,6 +94,7 @@ import PLAYER from "../../graphql/undercover/Player.gql"
 import PLAYERS from "../../graphql/undercover/Players.gql"
 import PLAYERS_SUBSCRIBTION from "../../graphql/undercover/PlayersSubscribtion.gql"
 import SET_ROUND from "../../graphql/undercover/SetRound.gql"
+import SEND_VOTE from "../../graphql/undercover/SendVote.gql"
 
 @Component
 export default class UnderCoverGame extends Vue {
@@ -112,6 +116,10 @@ export default class UnderCoverGame extends Vue {
     isSended = false
 
     isCurrentPlayer = false
+
+    isEndGame = false
+
+    choosePlayer = false
 
     key = 0
 
@@ -138,8 +146,18 @@ export default class UnderCoverGame extends Vue {
         return this.$store.state.user
     }
 
-    mounted() {
-        this.$apollo.addSmartQuery('players', {
+    async mounted() {
+        let player = await this.$apollo.query({
+            query: PLAYER,
+            variables: {
+                userId: this.user.id,
+                roomId: this.roomId
+            }
+        })
+
+        await (this.player = player.data.undercoverPlayers[0])
+
+        await this.$apollo.addSmartQuery('players', {
             query: PLAYERS,
             variables() {
                 return {
@@ -150,10 +168,20 @@ export default class UnderCoverGame extends Vue {
                 if (!loading) {
                     if (data && data.undercoverPlayers && data.undercoverPlayers.length) {
                         this.players = data.undercoverPlayers
-                        if(this.players[0].room.currentPlayer.id === this.player.id){
-                            this.isCurrentPlayer = true
-                        } else {
+                        if(!this.players[0].room.currentPlayer){
+                            this.isEndGame = true
                             this.isCurrentPlayer = false
+                            debugger
+                            if(this.selectedPlayer && this.selectedPlayer.id) {
+                                this.sendVote(this.selectedPlayer.id)
+                            }
+                        } else {
+                            this.isEndGame = false
+                            if(this.players[0].room.currentPlayer.id === this.player.id){
+                                this.isCurrentPlayer = true
+                            } else {
+                                this.isCurrentPlayer = false
+                            }
                         }
                         this.key ++
                     }
@@ -162,7 +190,6 @@ export default class UnderCoverGame extends Vue {
             subscribeToMore: {
                 document: PLAYERS_SUBSCRIBTION,
                 variables() {
-                    debugger
                     return {
                         roomId: this.roomId
                     }
@@ -178,30 +205,15 @@ export default class UnderCoverGame extends Vue {
 
     }
 
-    @Apollo({
-        query: PLAYER,
-        variables() {
-            return {
-                userId: this.user.id,
-                roomId: this.roomId
-            }
-        },
-        skip() {
-            return !this.user.id
-        },
-        result({ data, loading, networkStatus }: any) {
-            if (!loading) {
-                if (data && data.undercoverPlayers) {
-                    this.player = data.undercoverPlayers[0]
-                }
-            }
-        },
-    })
-    player: any = null
+    @Apollo()
+    player: any = {
+        id: null
+    }
 
     setSelectedPlayer(selectedPlayer) {
         if(selectedPlayer.id !== this.player.id){
             this.selectedPlayer = selectedPlayer
+            this.sendVote(selectedPlayer.id)
         } else {
             // @ts-ignore
             this.$vs.notification({
@@ -210,9 +222,23 @@ export default class UnderCoverGame extends Vue {
                 duration: 4000,
                 title: "Bats toi au lieu de voter pour toi même, c'est pas comme ca que tu vas gagner"
             })
-            this.selectedPlayer = { id: '' }
         }
         
+    }
+
+    async sendVote(id) {
+        debugger
+        if(!this.choosePlayer && this.isEndGame){
+            this.$apollo.mutate({
+                mutation: SEND_VOTE,
+                variables: {
+                    playerId: this.player.id,
+                    thinkIs: this.selectedPlayer.id,
+                    roomId: this.roomId
+                }
+            })
+            this.choosePlayer = true
+        }
     }
 
     async send() {
@@ -236,7 +262,7 @@ export default class UnderCoverGame extends Vue {
     @Watch('players', { deep: true })
     active() {
         if(this.player && this.player.id && this.players && this.players.length){
-            if(this.players[0].room.currentPlayer.id === this.player.id) {
+            if(this.players[0].room.currentPlayer && this.players[0].room.currentPlayer.id === this.player.id) {
                 this.isSended = false
                 this.interval = setInterval(() => {
                     this.progress += 0.5

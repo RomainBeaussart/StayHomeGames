@@ -18,6 +18,7 @@ type Mutation {
     kickUndercoverPlayer(data: kickUndercoverPlayerInput!): kickUndercoverPlayerPayload
     playUndercover(data: playUndercoverInput!): playUndercoverPayload
     setRoundUndercover(data: setRoundUndercoverInput!): setRoundUndercoverPayload
+    sendVoteUndercover(data: sendVoteUndercoverInput!): sendVoteUndercoverPlayload
 }
 
 input LoginInput {
@@ -85,3 +86,13 @@ input setRoundUndercoverInput {
 type setRoundUndercoverPayload {
     roomId: ID
 }
+
+input sendVoteUndercoverInput {
+    playerId: ID!
+    thinkIs: ID!
+    roomId: ID!
+}
+
+type sendVoteUndercoverPlayload {
+    roomId: ID
+} 

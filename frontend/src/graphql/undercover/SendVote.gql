@@ -1,0 +1,11 @@
+mutation SendVoteUndercover ($playerId: ID!, $thinkIs: ID!, $roomId: ID!){
+    sendVoteUndercover(
+        data:{
+            playerId: $playerId
+            thinkIs: $thinkIs
+            roomId: $roomId
+        }
+    ){
+        roomId
+    }
+}
