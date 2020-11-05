@@ -5,7 +5,7 @@
                 <vs-alert relief warn gradient class="d-flex justify-center align-center">
                     <template #title>
                         <div class="d-flex justify-center py-1">
-                            <h2 class="justify-center">{{ player && player.word ? player.word : "" }}</h2> {{ isCurrentPlayer}}
+                            <h2 class="justify-center">{{ player && player.word ? player.word : "" }}</h2>
                         </div>
                     </template>
                 </vs-alert>
@@ -203,6 +203,7 @@ export default class UnderCoverGame extends Vue {
         if(selectedPlayer.id !== this.player.id){
             this.selectedPlayer = selectedPlayer
         } else {
+            // @ts-ignore
             this.$vs.notification({
                 progress: 'auto',
                 color: 'warn',

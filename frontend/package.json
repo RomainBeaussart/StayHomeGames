@@ -61,20 +61,6 @@
     "material-design-icons-iconfont": "^5.0.1",
     "sass": "^1.22.9"
   },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/typescript"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "typescript-eslint-parser"
-    }
-  },
   "postcss": {
     "plugins": {
       "autoprefixer": {}

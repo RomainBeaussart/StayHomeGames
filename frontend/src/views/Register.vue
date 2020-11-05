@@ -90,6 +90,7 @@ export default class Register extends Vue {
                     }
                 }
             } catch (e) {
+                // @ts-ignore
                 this.$vs.notification({
                     progress: 'auto',
                     color: 'warn',
@@ -100,6 +101,7 @@ export default class Register extends Vue {
                 this.loading = false
             }
         } else {
+            // @ts-ignore
             this.$vs.notification({
                 progress: 'auto',
                 color: 'warn',
