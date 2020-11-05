@@ -4,6 +4,90 @@ export default {
     Query: {
     },
     Mutation: {
+        playUndercover: async (parent, args, context, info) => {
+            let currentPlayers = await context.prisma.undercoverRoom({ id: args.data.roomId }).players()
+            let room = await context.prisma.undercoverRoom({ id: args.data.roomId })
+            let undercoverIds = []
+            let civilianIds = []
+            let playerIds = currentPlayers.map(x => x.id)
+
+            /* --- selection Game Set --- */
+            let setGame = setGames[Math.floor(Math.random() * setGames.length)]
+            let cilianWord = setGame[Math.floor(Math.random() * setGame.length)]
+            let undercoverWord = ""
+            do {
+                undercoverWord = setGame[Math.floor(Math.random() * setGame.length)]
+            } while(cilianWord === undercoverWord)
+
+            while (undercoverIds.length < room.undercoverAmount) {
+                let player = currentPlayers[Math.floor(Math.random() * currentPlayers.length)]
+                undercoverIds.push(player.id)
+                undercoverIds = _.uniq(undercoverIds)
+            }
+            civilianIds = playerIds.filter(function (x) {
+                return !undercoverIds.filter(y => y === x).length;
+            })
+
+            await context.prisma.updateManyUndercoverPlayers({
+                where:{ id_in: undercoverIds },
+                data:{
+                    role: "UNDERCOVER",
+                    propositions: { set: [] },
+                    word: undercoverWord,
+                }
+            })
+
+            await context.prisma.updateManyUndercoverPlayers({
+                where:{ id_in: civilianIds },
+                data:{
+                    role: "CIVILIAN",
+                    propositions: { set: [] },
+                    word: cilianWord,
+                }
+            })
+
+            await context.prisma.updateUndercoverRoom({
+                where: { id: args.data.roomId },
+                data:{
+                    status: 'IN_GAME',
+                    currentPlayer: { connect: { id: playerIds[Math.floor(Math.random() * playerIds.length)] }}
+                }
+            })
+
+            return {
+                roomId: args.data.roomId
+            }
+        },
+        setRoundUndercover: async(parent, args, context, info) => {
+            let currentPlayers = await context.prisma.undercoverRoom({ id: args.data.roomId }).players()
+            let currentUser = await context.prisma.undercoverPlayer({ id: args.data.playerId }).user()
+            let playerIndex = currentPlayers.map(x => x.id).indexOf(args.data.playerId)
+            let newPlayerIndex = playerIndex + 1
+            if(currentPlayers.length === newPlayerIndex){
+                newPlayerIndex = 0
+            }
+
+            await context.prisma.updateUndercoverRoom({
+                where: { id: args.data.roomId },
+                data:{
+                    currentPlayer: { connect: { id: currentPlayers[newPlayerIndex].id }}
+                }
+            })
+
+            console.log("Next Player")
+
+            await context.prisma.updateUndercoverPlayer({
+                where:{ id: args.data.playerId },
+                data:{
+                    user: { connect: { id: currentUser.id }},
+                    propositions: { set: [...currentPlayers[playerIndex].propositions, args.data.proposition] }
+                }
+            })
+
+            return {
+                roomId: args.data.roomId
+            }
+        },
         newUndercoverRoom: async (parent, args, context, info) => {
             const room = await context.prisma.createUndercoverRoom({
                 name: args.data.settings.name,
@@ -63,3 +147,22 @@ export default {
         }
     }
 }
+
+const setGames = [
+    ["Cinéma", "Théatre", "Opera"],
+    ["Aéroport", "Port", "Gare", "Gare routière"],
+    ["Hong Kong","Singapour"],
+    ["Gel douche","Shampoing"],
+    ["iOS", "Android"],
+    ["Batman", "Ironman"],
+    ["Fruits", "Légumes"],
+    ["Orange", "Citron", "Pamplemousse", "Mandarine", "Clementine"],
+    ["Meulon", "Pasteque"],
+    ["Yaourt", "Glasse", "Sorbet"],
+    ["Call of Duty", "Battlefield"],
+    ["Pain chocolat", "Croissant", "Torsade", "Pain suisse"],
+    ["Appareil Photo", "Camera"],
+    ["Voiture", "Scooter", "Moto", "4x4", "Quad", "Voiture de golf", "Camion"],
+    ["Pates à la bolognaise", "Pates à la carbonara", "Pates au pesto", "Pates au saumon", "Pates au thon"],
+    ["Pizza", "Flammenküche", "Tarte"],
+]

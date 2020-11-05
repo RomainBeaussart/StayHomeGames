@@ -4,6 +4,8 @@ query UndercoverRoom($id: ID!){
         host { id }
         name
         public
+        status
+        undercoverAmount
         players {
             id
             user { id nickname }

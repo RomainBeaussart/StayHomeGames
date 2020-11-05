@@ -8,7 +8,6 @@
                         @click="route(game.action)"
                         :key="game.id"
                         type="3"
-                        color="secondary"
                     >
                         <template #title>
                             <h3>{{ game.title }}</h3>

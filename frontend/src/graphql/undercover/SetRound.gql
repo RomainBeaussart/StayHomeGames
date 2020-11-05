@@ -1,0 +1,11 @@
+mutation SetRound($roomId: ID!, $playerId: ID!, $proposition: String){
+    setRoundUndercover(
+        data: {
+            roomId: $roomId
+            playerId: $playerId
+            proposition: $proposition
+        }
+    ){
+        roomId
+    }
+}

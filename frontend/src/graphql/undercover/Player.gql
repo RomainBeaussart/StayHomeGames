@@ -1,0 +1,18 @@
+query Player ($userId: ID!, $roomId: ID!){
+    undercoverPlayers( where: {
+        user: { id: $userId }
+        room: { id: $roomId }
+    }){
+        id
+        word
+        room {
+            id name
+            players {
+                id
+            }
+            currentPlayer {
+                id
+            }
+        }
+    }
+}

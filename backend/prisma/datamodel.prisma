@@ -48,6 +48,8 @@ type UndercoverRoom {
     host: User! @relation(name:"UndercoverRoomHost")
     public: Boolean! @default(value: true)
     status: RoomStatus! @default(value: LOBBY)
+    undercoverAmount: Int! @default(value: 1)
+    currentPlayer: UndercoverPlayer @relation(name: "UndercoverRoomCurrentPlayer")
 }
 
 type UndercoverDuo {
