@@ -1,0 +1,10 @@
+query EndGameUndercover($roomId: ID!){
+    resultUndercoverRoom(data:{
+        roomId: $roomId
+    }){
+        civilanWord
+        undercoverWord
+        undercovers
+        mrWhites
+    }
+}

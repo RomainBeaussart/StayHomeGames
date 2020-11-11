@@ -19,6 +19,7 @@ subscription UndercoverRoomSubscription($roomId: ID!) {
         }
         room {
             id
+            status
             currentPlayer {
                 id
             }

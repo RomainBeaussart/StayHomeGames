@@ -1,7 +1,39 @@
-import _ from 'lodash';
+import _, { flatMap } from 'lodash';
 
 export default {
     Query: {
+        resultUndercoverRoom: async (parent, args,context, info) => {
+            let fragmentRoom = `fragment RoomFragmentPlayerList on UndercoverRoom {
+                id
+                name
+                players {
+                    id
+                    user{
+                        id
+                        nickname
+                    }
+                    role
+                    word
+                }
+            }`
+
+            let room = await context.prisma.undercoverRoom({
+                id: args.data.roomId
+            }).$fragment(fragmentRoom)
+
+            let players = room.players
+
+            let undercovers = players.filter(x => x.role === "UNDERCOVER")
+            let cilivans = players.filter(x => x.role === "CIVILIAN")
+            let undercoversName = undercovers.map(x => x.user.nickname)
+
+            return {
+                civilanWord: cilivans[0].word,
+                undercoverWord: undercovers[0].word,
+                undercovers: undercoversName,
+                mrWhites: []
+            }
+        },
     },
     Mutation: {
         playUndercover: async (parent, args, context, info) => {
@@ -70,9 +102,10 @@ export default {
 
             let newtPlayerId = currentPlayers[newPlayerIndex].id
 
-            let propositionsCounts = currentPlayers.map( x => x.propositions.length === 3)
+            let propositionsCounts = currentPlayers.map( x => x.propositions.length === 3).filter(x => x === true).length + 1
+            let isEndGame = propositionsCounts === currentPlayers.length
 
-            if(propositionsCounts.reduce((accumulator, currentValue) => accumulator && currentValue)) {
+            if(isEndGame) {
                 await context.prisma.updateUndercoverRoom({
                     where: { id: args.data.roomId },
                     data:{
@@ -81,7 +114,7 @@ export default {
                     }
                 })
             } else {
-                await context.prisma.updateUndercoverRoom({
+                    await context.prisma.updateUndercoverRoom({
                     where: { id: args.data.roomId },
                     data:{
                         currentPlayer: { connect: { id: currentPlayers[newPlayerIndex].id }}
@@ -104,15 +137,60 @@ export default {
             }
         },
         sendVoteUndercover: async (parent, args, context, info) => {
+
+            let fragmentRoom = `fragment FragmentRoom on Room{
+                id
+                name
+                players {
+                    id
+                    receivedVotesFrom{
+                        id
+                    }
+                }
+            }`
+
+            try{
+                await context.prisma.updateManyUndercoverPlayers({
+                    where: { room: { id: args.data.roomId } },
+                    data:{
+                        receivedVotesFrom: { disconnect: { id: args.data.playerId } }
+                    }
+                })
+            } catch (e) {
+
+            }
+
             await context.prisma.updateUndercoverPlayer({
-                where:{ id: args.data.thinkIs },
+                where: { id: args.data.thinkIs },
                 data:{
-                    receivedVotesFrom: { connect: { id: args.data.playerId } }
+                    receivedVotesFrom: { connect: { id: args.data.playerId }}
                 }
             })
-            return {
-                roomId: args.data.playerId
+
+            let currentPlayers = await context.prisma.undercoverRoom({
+                id: args.data.roomId
+            }).$fragment(fragmentRoom)
+
+            let players = currentPlayers.players
+            let totalVote = players.flatMap(x => x.receivedVotesFrom).length
+
+            if(totalVote === players.length){
+                await context.prisma.updateUndercoverRoom({
+                    where: { id: args.data.roomId },
+                    data:{
+                        status: 'END_GAME',
+                    }
+                })
             }
+
+            return {
+                roomId: args.data.roomId
+            }
+        },
+        endGameUndercoverRoom: async (parent, args, context, info) => {
+            await context.prisma.deleteManyUndercoverPlayers({
+                where: { room: { id: args.data.roomId } }
+            })
         },
         newUndercoverRoom: async (parent, args, context, info) => {
             const room = await context.prisma.createUndercoverRoom({

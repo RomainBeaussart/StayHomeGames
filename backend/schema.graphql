@@ -6,6 +6,7 @@ scalar DateTime
 
 type Query {
     loggedInUser: User
+    resultUndercoverRoom(data: resultUndercoverRoomInput): resultUndercoverRoomPayload
 }
 
 type Mutation {
@@ -19,6 +20,7 @@ type Mutation {
     playUndercover(data: playUndercoverInput!): playUndercoverPayload
     setRoundUndercover(data: setRoundUndercoverInput!): setRoundUndercoverPayload
     sendVoteUndercover(data: sendVoteUndercoverInput!): sendVoteUndercoverPlayload
+    endGameUndercoverRoom(data: endGameUndercoverInput!): endGameUndercoverPayload
 }
 
 input LoginInput {
@@ -96,3 +98,22 @@ input sendVoteUndercoverInput {
 type sendVoteUndercoverPlayload {
     roomId: ID
 } 
+
+input endGameUndercoverInput {
+    roomId: ID
+}
+
+type endGameUndercoverPayload {
+    roomId: ID
+}
+
+input resultUndercoverRoomInput {
+    roomId: ID
+}
+
+type resultUndercoverRoomPayload {
+    civilanWord: String
+    undercoverWord: String
+    undercovers: Json
+    mrWhites: Json
+}

@@ -9,6 +9,7 @@ query UndercoverRoom($roomId: ID!){
         }
         room {
             id
+            status
             currentPlayer {
                 id
             }

@@ -5,6 +5,7 @@ enum PlayerType {
 
 enum RoomStatus {
     IN_GAME
+    END_GAME
     LOBBY
 }
 
@@ -51,11 +52,4 @@ type UndercoverRoom {
     status: RoomStatus! @default(value: LOBBY)
     undercoverAmount: Int! @default(value: 1)
     currentPlayer: UndercoverPlayer @relation(name: "UndercoverRoomCurrentPlayer")
-}
-
-type UndercoverDuo {
-    id: ID! @id
-    createdAt: DateTime! @createdAt
-    updatedAt: DateTime! @updatedAt
-    words: [String] @scalarList(strategy: RELATION)
 }

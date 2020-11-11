@@ -13,7 +13,7 @@
             <v-col cols="12" class="d-flex justify-center">
                 <!-- Room: {{ player && player.room ? player.room.name : "Undercover" }} -->
             </v-col>
-            <v-col cols="5">
+            <v-col cols="7">
                 <vs-alert warn :progress="progress" v-model="isCurrentPlayer">
                     <template #icon>
                         <i class='bx bx-copy'></i>
@@ -28,6 +28,7 @@
                                     block
                                     v-model="proposition"
                                     label-placeholder="Proposition"
+                                    @keyup.enter="send(); isSended = true"
                                 ></vs-input>
                             </v-col>
                             <v-col cols="4" class="d-flex justify-center">
@@ -43,11 +44,32 @@
                     </template>
                 </vs-alert>
             </v-col>
+            <v-col cols="7" v-if="isFinish">
+                <vs-alert>
+                    <template #icon>
+                        <i class='bx bx-copy'></i>
+                    </template>
+                    <template #title>
+                        FIN DE LA PARTIE !
+                    </template>
+                        <v-row no-gutters>
+                            <v-col cols="12" class="d-flex justify-center">
+                                {{ results.undercovers && results.undercovers.length === 1 ? "L'undercover était" : "Les undercovers étaient" }} {{ results.undercovers ? results.undercovers.join(", ") : "" }}
+                            </v-col>
+                            <v-col cols="12" class="d-flex justify-center">
+                                Le mot {{ results.undercovers &&  results.undercovers.length === 1 ? "de l'undercover" : "des undercovers" }}: {{ results.undercoverWord }}
+                            </v-col>
+                            <v-col cols="12" class="d-flex justify-center mb-2">
+                                Le mot de base: {{ results.civilanWord }}
+                            </v-col>
+                        </v-row>
+                </vs-alert>
+            </v-col>
         </v-row>
-        <v-row>
-            <v-col cols="12" class="d-flex align-center justify-center">
+        <v-row class="d-flex justify-center">
+            <v-col cols="10" class="d-flex align-center justify-center">
                 <v-row class="d-flex justify-center">
-                    <v-col cols="4" class="d-flex align-center justify-center" v-for="plyr in players" :key="plyr.id">
+                    <v-col cols="3" class="d-flex align-center justify-center" v-for="plyr in players" :key="plyr.id">
                         <v-row no-gutters>
                             <v-col style="max-width: fit-content" class="pr-5" @click="setSelectedPlayer(plyr)">
                                 <template v-if="room.currentPlayer && room.currentPlayer.id === plyr.id">
@@ -69,7 +91,7 @@
                             </v-col>
                             <v-col class="d-flex align-center" cols="4">
                                 <v-row no-gutters>
-                                    <v-col cols="12" v-for="proposition in plyr.propositions" :key="proposition">
+                                    <v-col cols="12" v-for="(proposition, index) in plyr.propositions" :key="index">
                                         <i class='bx bx-right-arrow'></i> {{ proposition }}<br/>
                                     </v-col>
                                 </v-row>
@@ -95,6 +117,7 @@ import PLAYERS from "../../graphql/undercover/Players.gql"
 import PLAYERS_SUBSCRIBTION from "../../graphql/undercover/PlayersSubscribtion.gql"
 import SET_ROUND from "../../graphql/undercover/SetRound.gql"
 import SEND_VOTE from "../../graphql/undercover/SendVote.gql"
+import END_GAME from "../../graphql/undercover/EndGame.gql"
 
 @Component
 export default class UnderCoverGame extends Vue {
@@ -119,9 +142,9 @@ export default class UnderCoverGame extends Vue {
 
     isEndGame = false
 
-    choosePlayer = false
-
     key = 0
+
+    isFinish = false
 
     get maskFace() {
         return maskFace
@@ -164,7 +187,7 @@ export default class UnderCoverGame extends Vue {
                     roomId: this.roomId
                 }
             },
-            result: ({ data, loading, networkStatus }: any) => {
+            result: async ({ data, loading, networkStatus }: any) => {
                 if (!loading) {
                     if (data && data.undercoverPlayers && data.undercoverPlayers.length) {
                         this.players = data.undercoverPlayers
@@ -172,7 +195,10 @@ export default class UnderCoverGame extends Vue {
                             this.isEndGame = true
                             this.isCurrentPlayer = false
                             debugger
-                            if(this.selectedPlayer && this.selectedPlayer.id) {
+                            if(this.players[0].room.status === "END_GAME"){
+                                debugger
+                                this.isFinish = true
+                            } else if(this.selectedPlayer && this.selectedPlayer.id) {
                                 this.sendVote(this.selectedPlayer.id)
                             }
                         } else {
@@ -201,11 +227,26 @@ export default class UnderCoverGame extends Vue {
         })
     }
 
-    afterMouted() {
+    @Apollo({
+        query: END_GAME,
+        variables() {
+            return {
+                roomId: this.roomId
+            };
+        },
+        skip() {
+            return !this.isFinish
+        },
+        result({ data, loading, networkStatus }: any) {
+            if (!loading) {
+                if (data) {
+                    this.results = data.resultUndercoverRoom
+                }
+            }
+        },
+    })
+    results: any = null
 
-    }
-
-    @Apollo()
     player: any = {
         id: null
     }
@@ -227,8 +268,7 @@ export default class UnderCoverGame extends Vue {
     }
 
     async sendVote(id) {
-        debugger
-        if(!this.choosePlayer && this.isEndGame){
+        if(this.isEndGame && !this.isFinish){
             this.$apollo.mutate({
                 mutation: SEND_VOTE,
                 variables: {
@@ -237,7 +277,6 @@ export default class UnderCoverGame extends Vue {
                     roomId: this.roomId
                 }
             })
-            this.choosePlayer = true
         }
     }
 
