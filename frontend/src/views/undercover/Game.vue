@@ -110,7 +110,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { Apollo } from "../../decorators";
-import { maskFace } from "../../assets/exports";
+import { undercoverPicture } from "../../assets/exports";
 
 import PLAYER from "../../graphql/undercover/Player.gql"
 import PLAYERS from "../../graphql/undercover/Players.gql"
@@ -147,7 +147,7 @@ export default class UnderCoverGame extends Vue {
     isFinish = false
 
     get maskFace() {
-        return maskFace
+        return undercoverPicture
     }
 
     get roomId() {

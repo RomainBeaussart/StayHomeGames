@@ -110,7 +110,7 @@ export default {
                     where: { id: args.data.roomId },
                     data:{
                         currentPlayer: { disconnect: true },
-                        status: 'LOBBY'
+                        status: 'END_GAME'
                     }
                 })
             } else {
@@ -178,7 +178,7 @@ export default {
                 await context.prisma.updateUndercoverRoom({
                     where: { id: args.data.roomId },
                     data:{
-                        status: 'END_GAME',
+                        status: 'LOBBY',
                     }
                 })
             }
