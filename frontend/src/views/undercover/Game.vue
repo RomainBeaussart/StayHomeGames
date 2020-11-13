@@ -62,6 +62,14 @@
                             <v-col cols="12" class="d-flex justify-center mb-2">
                                 Le mot de base: {{ results.civilanWord }}
                             </v-col>
+                            <v-col cols="12">
+                                <vs-button
+                                    gradient
+                                    @click="backToLobby()"
+                                >
+                                    Retourner au Lobby
+                                </vs-button>
+                            </v-col>
                         </v-row>
                 </vs-alert>
             </v-col>
@@ -266,6 +274,10 @@ export default class UnderCoverGame extends Vue {
             })
         }
         
+    }
+
+    backToLobby() {
+        this.$router.push({ name: 'undercover-room', params: { roomId: this.roomId }})
     }
 
     async sendVote(id) {
