@@ -297,6 +297,7 @@ export default class UnderCoverLobby extends Vue {
                 roomId: this.roomId
             }
         })
+        document.location.reload(true)
     }
 
     async kick(playerId){

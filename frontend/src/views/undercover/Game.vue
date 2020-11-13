@@ -195,7 +195,7 @@ export default class UnderCoverGame extends Vue {
                             this.isEndGame = true
                             this.isCurrentPlayer = false
                             debugger
-                            if(this.players[0].room.status === "END_GAME"){
+                            if(this.players[0].room.status === "LOBBY"){
                                 debugger
                                 this.isFinish = true
                             } else if(this.selectedPlayer && this.selectedPlayer.id) {
