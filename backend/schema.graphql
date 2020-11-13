@@ -78,6 +78,10 @@ type kickUndercoverPlayerPayload {
     roomId: ID
 }
 
+input playUndercoverInput {
+    roomId: ID!
+}
+
 type playUndercoverPayload {
     roomId: ID
 }
@@ -121,6 +125,7 @@ type resultUndercoverRoomPayload {
     mrWhites: Json
 }
 
+
 #Quizz
 input newQuizzRoomInput {
     userId: ID!
@@ -147,7 +152,5 @@ input kickQuizzPlayerInput {
 
 type kickQuizzPlayerPayload {
     roomId: ID
-input playUndercoverInput {
-    roomId: ID!
 }
 
