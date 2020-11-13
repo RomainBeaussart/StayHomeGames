@@ -3,6 +3,7 @@ import VueApollo from 'vue-apollo'
 import VueClipboard from 'vue-clipboard2'
 import Vuesax from 'vuesax'
 import 'vuesax/dist/vuesax.css'
+import Bars from 'vuebars'
 
 import vuetify from './plugins/vuetify'
 import App from './App.vue';
@@ -15,6 +16,7 @@ Vue.config.productionTip = false;
 
 Vue.use(VueApollo)
 Vue.use(VueClipboard);
+Vue.use(Bars)
 Vue.use(Vuesax, {
     colors: {
         primary: '#4F5D75',

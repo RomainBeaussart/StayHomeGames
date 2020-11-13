@@ -143,21 +143,26 @@ export default {
                 name
                 players {
                     id
-                    receivedVotesFrom{
+                    receivedVotesFrom {
                         id
                     }
                 }
             }`
 
-            try{
+            let playerWasReceivedVotes = await context.prisma.undercoverPlayers({
+                where: {
+                    room: { id: args.data.roomId },
+                    receivedVotesFrom_some: { id: args.data.playerId }
+                }
+            })
+
+            if(playerWasReceivedVotes.length){
                 await context.prisma.updateManyUndercoverPlayers({
-                    where: { room: { id: args.data.roomId } },
-                    data:{
-                        receivedVotesFrom: { disconnect: { id: args.data.playerId } }
+                    where: { id: playerWasReceivedVotes[0].id },
+                    data: {
+                        receivedVotesFrom: { disconnect: { id: args.data.playerId }}
                     }
                 })
-            } catch (e) {
-
             }
 
             await context.prisma.updateUndercoverPlayer({
