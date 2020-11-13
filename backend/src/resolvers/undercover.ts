@@ -1,4 +1,4 @@
-import _, { flatMap } from 'lodash';
+import _ from "lodash"
 
 export default {
     Query: {
@@ -172,7 +172,7 @@ export default {
             }).$fragment(fragmentRoom)
 
             let players = currentPlayers.players
-            let totalVote = players.flatMap(x => x.receivedVotesFrom).length
+            let totalVote = (_.flatMap(players, x => x.receivedVotesFrom)).length
 
             if(totalVote === players.length){
                 await context.prisma.updateUndercoverRoom({
