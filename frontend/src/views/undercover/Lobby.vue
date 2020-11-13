@@ -8,12 +8,21 @@
                 <h5>Undercover</h5>
             </v-col>
             <v-col cols="1" class="d-flex justify-center" v-if="isHost">
+                <!-- <vs-button
+                    size="large"
+                    warn
+                    gradient
+                    block
+                    :disabled="room.players && room.players.length < 4"
+                    @click="play()"
+                >
+                    Play
+                </vs-button> -->
                 <vs-button
                     size="large"
                     warn
                     gradient
                     block
-                    :active="active == 0"
                     @click="play()"
                 >
                     Play
@@ -73,6 +82,14 @@
                         Private
                     </template>
                 </vs-switch>
+            </v-col>
+        </v-row>
+        <v-row class="d-flex align-center justify-center">
+            <v-col cols="2" class="d-flex align-center justify-end">
+                Nombre d'Undercover
+            </v-col>
+            <v-col cols="3" class="d-flex align-center">
+                <vs-pagination gradient not-arrows v-model="room.undercoverAmount" :length="maxUndercoverAmount" />
             </v-col>
         </v-row>
         <v-row class="align-center justify-center">
@@ -178,10 +195,30 @@ export default class UnderCoverLobby extends Vue {
         return true
     }
 
+    get maxUndercoverAmount() {
+        if(this.room.players.length === 15) {
+            return 4
+        }
+        if(this.room.players.length >= 10) {
+            if(this.room.undercoverAmount > 3) {
+                this.room.undercoverAmount = 3
+            }
+            return 3
+        }
+        if(this.room.players.length >= 6) {
+            if(this.room.undercoverAmount > 2) {
+                this.room.undercoverAmount = 2
+            }
+            return 2
+        }
+        return 1
+    }
+
     room: any = {
         id: '',
         name: '',
-        public: true
+        public: true,
+        undercoverAmount: 1
     }
 
     previousSettings: any = null
@@ -198,7 +235,9 @@ export default class UnderCoverLobby extends Vue {
                 if (!loading) {
                     if (data && data.undercoverRoom) {
                         if(this.isHost){
+                            debugger
                             this.room.players = data.undercoverRoom.players
+                            this.room.status = data.undercoverRoom.status
                         } else {
                             this.room = data.undercoverRoom
                         }
@@ -277,6 +316,7 @@ export default class UnderCoverLobby extends Vue {
                 roomId: this.roomId
             }
         })
+        debugger
     }
 
     @Watch('room', { deep: true })
@@ -287,7 +327,8 @@ export default class UnderCoverLobby extends Vue {
                 variables: {
                     id: this.room.id,
                     name: this.room.name,
-                    public: this.room.public
+                    public: this.room.public,
+                    undercoverAmount: this.room.undercoverAmount
                 }
             })
         } else if(this.previousSettings) {
@@ -299,6 +340,10 @@ export default class UnderCoverLobby extends Vue {
             debugger
         }
         this.previousSettings = { ...this.room }
+        if (this.room.status === 'IN_GAME') {
+            debugger
+            this.$router.replace({ name: 'undercover-play', params: { roomId: this.roomId }})
+        }
     }
 
     @Watch('isPlayer')

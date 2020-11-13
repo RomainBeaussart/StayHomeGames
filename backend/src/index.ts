@@ -60,15 +60,19 @@ const resolvers = {
     Subscription: {
         undercoverRoom: {
             subscribe: async (parent, args, context, info) => {
-                console.log(args)
                 return context.binding.subscription.undercoverRoom(args, info)
+            },
+        },
+        undercoverPlayer: {
+            subscribe: async (parent, args, context, info) => {
+                return context.binding.subscription.undercoverPlayer(args, info)
             },
         },
         quizzRoom: {
             subscribe: async (parent, args, context, info) => {
                 console.log(args)
                 return context.binding.subscription.quizzRoom(args, info)
-            },
+            }
         },
     }
 }

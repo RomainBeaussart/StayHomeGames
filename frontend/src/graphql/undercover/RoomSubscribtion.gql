@@ -9,6 +9,8 @@ subscription UndercoverRoomSubscription($id: ID!) {
             id
             name
             public
+            status
+            undercoverAmount
             players {
                 id
                 user {

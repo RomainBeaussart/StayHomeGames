@@ -5,6 +5,7 @@ enum PlayerType {
 
 enum RoomStatus {
     IN_GAME
+    END_GAME
     LOBBY
 }
 
@@ -37,6 +38,7 @@ type UndercoverPlayer {
     propositions: [String] @scalarList(strategy: RELATION)
     room: UndercoverRoom! @relation(name:"UndercoverRoomPlayers")
     description: String
+    receivedVotesFrom: [UndercoverPlayer!] @relation(name: "UndercoverPlayerReceivedVotesFrom")
 }
 
 type UndercoverRoom {
@@ -48,13 +50,8 @@ type UndercoverRoom {
     host: User! @relation(name:"UndercoverRoomHost")
     public: Boolean! @default(value: true)
     status: RoomStatus! @default(value: LOBBY)
-}
-
-type UndercoverDuo {
-    id: ID! @id
-    createdAt: DateTime! @createdAt
-    updatedAt: DateTime! @updatedAt
-    words: [String] @scalarList(strategy: RELATION)
+    undercoverAmount: Int! @default(value: 1)
+    currentPlayer: UndercoverPlayer @relation(name: "UndercoverRoomCurrentPlayer")
 }
 
 # ---- QUIZZ --- //

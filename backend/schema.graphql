@@ -6,6 +6,7 @@ scalar DateTime
 
 type Query {
     loggedInUser: User
+    resultUndercoverRoom(data: resultUndercoverRoomInput): resultUndercoverRoomPayload
 }
 
 type Mutation {
@@ -16,6 +17,10 @@ type Mutation {
     newUndercoverRoom(data: newUndercoverRoomInput!): newUndercoverRoomPayload
     joinUndercoverRoom(data: joinUndercoverRoomInput!): joinUndercoverRoomPayload
     kickUndercoverPlayer(data: kickUndercoverPlayerInput!): kickUndercoverPlayerPayload
+    playUndercover(data: playUndercoverInput!): playUndercoverPayload
+    setRoundUndercover(data: setRoundUndercoverInput!): setRoundUndercoverPayload
+    sendVoteUndercover(data: sendVoteUndercoverInput!): sendVoteUndercoverPlayload
+    endGameUndercoverRoom(data: endGameUndercoverInput!): endGameUndercoverPayload
 
     #Quizz
     newQuizzRoom(data: newQuizzRoomInput!): newQuizzRoomPayload
@@ -73,6 +78,49 @@ type kickUndercoverPlayerPayload {
     roomId: ID
 }
 
+type playUndercoverPayload {
+    roomId: ID
+}
+
+input setRoundUndercoverInput {
+    roomId: ID!
+    playerId: ID!
+    proposition: String
+}
+
+type setRoundUndercoverPayload {
+    roomId: ID
+}
+
+input sendVoteUndercoverInput {
+    playerId: ID!
+    thinkIs: ID!
+    roomId: ID!
+}
+
+type sendVoteUndercoverPlayload {
+    roomId: ID
+} 
+
+input endGameUndercoverInput {
+    roomId: ID
+}
+
+type endGameUndercoverPayload {
+    roomId: ID
+}
+
+input resultUndercoverRoomInput {
+    roomId: ID
+}
+
+type resultUndercoverRoomPayload {
+    civilanWord: String
+    undercoverWord: String
+    undercovers: Json
+    mrWhites: Json
+}
+
 #Quizz
 input newQuizzRoomInput {
     userId: ID!
@@ -99,4 +147,7 @@ input kickQuizzPlayerInput {
 
 type kickQuizzPlayerPayload {
     roomId: ID
+input playUndercoverInput {
+    roomId: ID!
 }
+

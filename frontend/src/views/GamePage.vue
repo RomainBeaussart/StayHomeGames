@@ -17,8 +17,7 @@
                         v-for="game of games"
                         @click="route(game.action)"
                         :key="game.id"
-                        type="1"
-                        color="secondary"
+                        type="3"
                     >
                         <template #title>
                             <h3>{{ game.title }}</h3>
