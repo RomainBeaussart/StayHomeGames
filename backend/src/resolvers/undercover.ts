@@ -193,13 +193,20 @@ export default {
             })
         },
         newUndercoverRoom: async (parent, args, context, info) => {
-            console.log("eee")
+            const descriptions = [
+                "N'est pas bizarre, juste en édition limitée",
+                "Croyant au sport, mais pas pratiquant",
+                "Un jour il est né, depuis il improvise",
+            ]
+
+            let description = descriptions[Math.floor(Math.random() * descriptions.length)]
+
             const room = await context.prisma.createUndercoverRoom({
                 name: args.data.settings.name,
                 host: { connect: { id: args.data.userId}},
                 players: { create: [{
                     user: { connect: { id: args.data.userId } },
-                    description: "N'est pas bizarre, juste en édition limitée"
+                    description: description
                 }]}
             })
             return {
@@ -209,7 +216,8 @@ export default {
         joinUndercoverRoom: async (parent, args, context, info) => {
             const descriptions = [
                 "N'est pas bizarre, juste en édition limitée",
-                "",
+                "Croyant au sport, mais pas pratiquant",
+                "Un jour il est né, depuis il improvise",
             ]
 
             let description = descriptions[Math.floor(Math.random() * descriptions.length)]

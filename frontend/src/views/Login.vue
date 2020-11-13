@@ -64,7 +64,7 @@ export default class Login extends Vue {
             if (result.data.login) {
                 // this.$store.commit('logoutAdmin')
                 localStorage.setItem('apollo-token', result.data.login.token)
-                this.$router.replace({ name: 'gamepage' })
+                this.$router.push({ name: 'gamepage' })
                 this.$emit('isConnected')
             }
         } catch (e) {
