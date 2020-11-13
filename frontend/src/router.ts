@@ -10,8 +10,8 @@ import UnderCoverCreateRoom from './views/undercover/CreateRoom.vue'
 import UnderCoverLobby from './views/undercover/Lobby.vue'
 import UnderCoverGame from './views/undercover/Game.vue'
 
-import QuizzCreateRoom from './views/quizz/CreateRoomQuizz.vue'
-import QuizzLobby from './views/quizz/LobbyQuizz.vue'
+import QuizzCreateRoom from './views/quizz/CreateRoom.vue'
+import QuizzLobby from './views/quizz/Lobby.vue'
 
 import GamePage from './views/GamePage.vue'
 import Login from './views/Login.vue'

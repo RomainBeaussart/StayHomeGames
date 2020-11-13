@@ -14,10 +14,11 @@
             <v-col cols="12" class='d-flex justify-center'>
                 <vs-card-group>
                     <vs-card
-                        v-for="game of games"
-                        @click="route(game.action)"
+                        v-for="(game) of games"
+                        @click="game.comingSoon ? null : route(game.action)"
                         :key="game.id"
                         type="3"
+                        :disabled="game.comingSoon"
                     >
                         <template #title>
                             <h3>{{ game.title }}</h3>
@@ -26,7 +27,7 @@
                             <img :src="game.picture" alt="" />
                         </template>
                         <template #text>
-                            <p>{{ game.description }}</p>
+                            <p style="min-width: 10vw">{{ game.description }}</p>
                         </template>
                         <template #interactions>
                           <vs-button warn>
@@ -46,8 +47,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { Apollo } from "../decorators";
-import { undercoverPicture } from '../assets/exports'
-import { quizzPicture } from '../assets/exports'
+import { undercoverPicture, quizzPicture, comingSoon } from '../assets/exports'
 
 @Component
 export default class GamePage extends Vue {
@@ -57,6 +57,7 @@ export default class GamePage extends Vue {
             {
                 id: 1,
                 title: "Undercover",
+                comingSoon: false,
                 picture: undercoverPicture,
                 description: `
                 Trouvez l'imposteur parmit les joueurs, grâce aux mots qu'ils vous donnent`,
@@ -68,9 +69,46 @@ export default class GamePage extends Vue {
             {
                 id: 2,
                 title: "StayHome! Quizz",
+                comingSoon: true,
                 picture: quizzPicture,
                 description: `
                 Répondez à une série de questions plus ou moins dures !`,
+                action: {
+                    page:'quizz',
+                    params: null,
+                },
+            },
+            {
+                id: 3,
+                title: "StayHome!",
+                comingSoon: true,
+                picture: comingSoon,
+                description: `
+                Bientot disponible`,
+                action: {
+                    page:'quizz',
+                    params: null,
+                },
+            },
+            {
+                id: 4,
+                title: "StayHome!",
+                comingSoon: true,
+                picture: comingSoon,
+                description: `
+                Bientot disponible`,
+                action: {
+                    page:'quizz',
+                    params: null,
+                },
+            },
+            {
+                id: 5,
+                title: "StayHome!",
+                comingSoon: true,
+                picture: comingSoon,
+                description: `
+                Bientot disponible`,
                 action: {
                     page:'quizz',
                     params: null,
@@ -84,4 +122,10 @@ export default class GamePage extends Vue {
     }
 }
 </script>
+
+<style>
+.vs-card__group-cards::-webkit-scrollbar {
+  display: none;
+}
+</style>
 
