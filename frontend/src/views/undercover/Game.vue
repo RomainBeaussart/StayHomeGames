@@ -203,6 +203,7 @@ export default class UnderCoverGame extends Vue {
                             }
                         } else {
                             this.isEndGame = false
+                            this.isFinish = false
                             if(this.players[0].room.currentPlayer.id === this.player.id){
                                 this.isCurrentPlayer = true
                             } else {
